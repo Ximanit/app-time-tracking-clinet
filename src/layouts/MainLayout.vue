@@ -21,7 +21,7 @@
         </q-btn>
         <div class="flex items-center name_exit-btn">
           <div style="font-size: 20px">Ivanov.DV</div>
-          <q-btn flat>
+          <q-btn flat @click="logout()">
             <div class="image-container">
               <img
                 class="first-image"
@@ -55,6 +55,11 @@ export default defineComponent({
       model: ref(null),
       options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
     };
+  },
+  methods: {
+    logout() {
+      this.$router.replace("/auth");
+    },
   },
 });
 </script>

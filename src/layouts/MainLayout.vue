@@ -13,7 +13,13 @@
             :dense="true"
           />
         </div>
-
+        <q-btn
+          icon="refresh"
+          class="q-ml-xl help-btn"
+          color="warning"
+          text-color="black"
+          @click="updateTask()"
+        />
         <q-space />
 
         <q-btn class="q-mr-xl help-btn" color="warning" text-color="black">
@@ -47,6 +53,8 @@
 
 <script>
 import { defineComponent, ref } from "vue";
+import { api } from "../boot/axios";
+import { useTask } from "../stores/example-store";
 
 export default defineComponent({
   name: "MainLayout",
@@ -59,6 +67,14 @@ export default defineComponent({
   methods: {
     logout() {
       this.$router.replace("/auth");
+    },
+    async updateTask() {
+      try {
+        const res = await api.get("/task/");
+        useTask().setTaskData(res.data);
+      } catch (error) {
+        console.log("ERROR");
+      }
     },
   },
 });

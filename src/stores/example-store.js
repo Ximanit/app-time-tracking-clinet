@@ -1,15 +1,17 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useCounterStore = defineStore('counter', {
+export const useTask = defineStore("taskData", {
   state: () => ({
-    counter: 0,
+    taskData: null,
   }),
-  getters: {
-    doubleCount: (state) => state.counter * 2,
-  },
   actions: {
-    increment() {
-      this.counter++;
+    setTaskData(data) {
+      this.taskData = data;
+    },
+  },
+  getters: {
+    getTaskData() {
+      return this.taskData;
     },
   },
 });

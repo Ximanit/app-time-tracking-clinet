@@ -1,70 +1,75 @@
 <template>
-  <q-card style="width: 420px" class="q-pa-md card q-ma-sm">
-    <q-card-section class="text-bold q-pl-none" style="font-size: 18px">
+  <q-card class="q-pa-md card q-ma-sm">
+    <q-card-section
+      class="text-bold q-px-none q-pt-none"
+      style="font-size: 18px"
+    >
       {{ task[id].task_name }}
     </q-card-section>
-    <q-card-section class="q-pt-none q-pl-none">
+    <q-card-section class="q-pt-none q-px-none">
       <q-chip
-        style="font-size: 18px"
-        text-color="white"
-        class="rounded-borders"
-        color="info"
+        style="height: 36px"
+        text-color="dark"
+        class="date text-weight-medium text-body2 q-px-md q-py-sm q-ma-none q-mr-sm"
       >
         {{ formatDate(task[id].data_start) }}
         - {{ formatDate(task[id].data_end) }}
       </q-chip>
       <q-chip
-        style="font-size: 18px"
-        text-color="white"
-        class="rounded-borders"
-        color="negative"
+        style="height: 36px"
+        text-color="negative"
+        class="urgency q-ma-none"
         >{{ task[id].urgency }}</q-chip
       >
     </q-card-section>
-    <q-btn
-      style="width: 100%; border-radius: 12px"
-      class="q-pa-none"
-      outline
-      color="positive"
-      @click="this.fullTask = true"
-    >
-      Подробнее
-    </q-btn>
+    <div>
+      <q-btn
+        class="q-pa-none btn"
+        outline
+        color="positive"
+        @click="this.fullTask = true"
+      >
+        Подробнее
+      </q-btn>
+      <q-btn
+        class="q-pa-none q-ml-sm btn"
+        style="width: 127px"
+        outline
+        color="positive"
+      >
+        Принять
+      </q-btn>
+    </div>
   </q-card>
   <q-dialog v-model="fullTask">
-    <q-card>
-      <q-card style="width: 100%; height: 300px">
-        <q-card-section class="text-bold q-pl-none" style="font-size: 18px">
-          {{ task[id].task_name }}
-        </q-card-section>
-        <q-card-section class="q-pt-none q-pl-none">
-          <q-chip
-            style="font-size: 18px"
-            text-color="white"
-            class="rounded-borders"
-            color="info"
-          >
-            {{ formatDate(task[id].data_start) }}
-            - {{ formatDate(task[id].data_end) }}
-          </q-chip>
-          <q-chip
-            style="font-size: 18px"
-            text-color="white"
-            class="rounded-borders"
-            color="negative"
-            >{{ task[id].urgency }}</q-chip
-          >
-        </q-card-section>
-        <q-btn
-          style="width: 100%; border-radius: 12px"
-          class="q-pa-none"
-          outline
-          color="positive"
-          @click="this.fullTask = true"
+    <q-card class="full-card">
+      <q-card-section class="text-bold q-px-none text-h5">
+        {{ task[id].task_name }}
+      </q-card-section>
+      <q-card-section class="q-pt-none q-px-none">
+        <q-chip
+          style="height: 36px"
+          text-color="dark"
+          class="date text-weight-medium text-body2 q-px-md q-py-sm q-ma-none q-mr-sm"
         >
-          Подробнее
+          {{ formatDate(task[id].data_start) }}
+          - {{ formatDate(task[id].data_end) }}
+        </q-chip>
+        <q-chip
+          style="height: 36px"
+          text-color="negative"
+          class="urgency q-ma-none"
+          >{{ task[id].urgency }}</q-chip
+        >
+      </q-card-section>
+      <q-card-section class="q-px-none q-pt-none" style="font-size: 18px">
+        {{ task[id].description }}
+      </q-card-section>
+      <div class="row justify-end">
+        <q-btn class="q-pa-none q-py-md btn-full" color="positive" outline>
+          Принять
         </q-btn>
-      </q-card>
+      </div>
     </q-card>
   </q-dialog>
 </template>
@@ -103,10 +108,43 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
+  width: 420px;
   border-radius: 24px;
-  border: 1px solid #01803d;
+  border: 1px solid #8cc63e;
+  background: #fff;
   box-shadow: 0px 1px 11.3px 0px rgba(0, 0, 0, 0.25);
+}
+
+.date {
+  border-radius: 8px;
+  border: 1px solid #1f1f1f;
+  background: var(--unnamed, rgba(154, 154, 154, 0.32));
+}
+.urgency {
+  border-radius: 8px;
+  border: 1px solid #e00;
+  background: var(--unnamed, rgba(238, 0, 0, 0.16));
+}
+.full-card {
+  max-width: 750px;
+  min-width: 700px;
+  min-height: 250px;
+  padding: 32px 24px;
+  border-radius: 24px;
+  border: 1px solid #8cc63e;
+  background: #fff;
+}
+
+.btn {
+  width: 250px;
+  border-radius: 12px;
+}
+
+.btn-full {
+  max-width: 328px;
+  height: 52px;
+  border-radius: 12px;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <q-page>
+    <!-- TODO переделать -->
     <div class="q-pt-md" style="margin-left: 314px">
       <div class="row q-gutter-sm">
         <div v-for="(task, id) in tasks" :key="task.id" transition="scale">

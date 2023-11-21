@@ -1,10 +1,23 @@
+import MainLayout from "layouts/MainLayout.vue";
 import AuthLayout from "src/layouts/AuthLayout.vue";
+
+import IndexPage from "pages/IndexPage.vue";
+import TaskPage from "src/pages/TaskPage.vue";
 
 const routes = [
   {
     path: "/",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
+    component: MainLayout,
+    children: [
+      {
+        path: "",
+        component: IndexPage,
+      },
+      {
+        path: "/task",
+        component: TaskPage,
+      },
+    ],
   },
   {
     path: "/auth",

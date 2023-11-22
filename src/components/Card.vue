@@ -1,49 +1,10 @@
 <template>
-  <q-card class="q-pa-md card q-ma-sm">
-    <q-card-section
-      class="text-bold q-px-none q-pt-none"
-      style="font-size: 18px"
-    >
-      {{ task[id].task_name }}
-    </q-card-section>
-    <q-card-section class="q-pt-none q-px-none">
-      <q-chip
-        style="height: 36px"
-        text-color="dark"
-        class="date text-weight-medium text-body2 q-px-md q-py-sm q-ma-none q-mr-sm"
+  <div class="desktop-only">
+    <q-card class="q-pa-md card q-ma-sm">
+      <q-card-section
+        class="text-bold q-px-none q-pt-none"
+        style="font-size: 18px"
       >
-        {{ formatDate(task[id].data_start) }}
-        - {{ formatDate(task[id].data_end) }}
-      </q-chip>
-      <q-chip
-        style="height: 36px"
-        text-color="negative"
-        class="urgency q-ma-none"
-        >{{ task[id].urgency }}</q-chip
-      >
-    </q-card-section>
-    <div>
-      <q-btn
-        class="q-pa-none btn"
-        outline
-        color="positive"
-        @click="this.fullTask = true"
-      >
-        Подробнее
-      </q-btn>
-      <q-btn
-        class="q-pa-none q-ml-sm btn"
-        style="width: 127px"
-        outline
-        color="positive"
-      >
-        Принять
-      </q-btn>
-    </div>
-  </q-card>
-  <q-dialog v-model="fullTask">
-    <q-card class="full-card">
-      <q-card-section class="text-bold q-px-none text-h5">
         {{ task[id].task_name }}
       </q-card-section>
       <q-card-section class="q-pt-none q-px-none">
@@ -62,16 +23,109 @@
           >{{ task[id].urgency }}</q-chip
         >
       </q-card-section>
-      <q-card-section class="q-px-none q-pt-none" style="font-size: 18px">
-        {{ task[id].description }}
-      </q-card-section>
-      <div class="row justify-end">
-        <q-btn class="q-pa-none q-py-md btn-full" color="positive" outline>
+      <div>
+        <q-btn
+          class="q-pa-none btn"
+          outline
+          color="positive"
+          @click="this.fullTask = true"
+        >
+          Подробнее
+        </q-btn>
+        <q-btn
+          class="q-pa-none q-ml-sm btn"
+          style="width: 127px"
+          outline
+          color="positive"
+        >
           Принять
         </q-btn>
       </div>
     </q-card>
-  </q-dialog>
+    <q-dialog v-model="fullTask">
+      <q-card class="full-card">
+        <q-card-section class="text-bold q-px-none text-h5">
+          {{ task[id].task_name }}
+        </q-card-section>
+        <q-card-section class="q-pt-none q-px-none">
+          <q-chip
+            style="height: 36px"
+            text-color="dark"
+            class="date text-weight-medium text-body2 q-px-md q-py-sm q-ma-none q-mr-sm"
+          >
+            {{ formatDate(task[id].data_start) }}
+            - {{ formatDate(task[id].data_end) }}
+          </q-chip>
+          <q-chip
+            style="height: 36px"
+            text-color="negative"
+            class="urgency q-ma-none"
+            >{{ task[id].urgency }}</q-chip
+          >
+        </q-card-section>
+        <q-card-section class="q-px-none q-pt-none" style="font-size: 18px">
+          {{ task[id].description }}
+        </q-card-section>
+        <div class="row justify-end">
+          <q-btn class="q-pa-none q-py-md btn-full" color="positive" outline>
+            Принять
+          </q-btn>
+        </div>
+      </q-card>
+    </q-dialog>
+  </div>
+
+  <div class="mobile-only">
+    <q-card class="q-pa-md card-mobile q-ma-sm">
+      <q-card-section
+        class="text-bold q-px-none q-pt-none"
+        style="font-size: 13px"
+      >
+        <!-- Name -->
+        {{ task[id].task_name }}
+      </q-card-section>
+      <q-card-section class="q-pt-none q-px-none">
+        <q-chip
+          style="height: 36px; font-size: 8px"
+          text-color="dark"
+          class="date text-weight-medium q-px-md q-py-sm q-ma-none q-mr-sm"
+        >
+          <!-- date -->
+          {{ formatDate(task[id].data_start) }}
+          - {{ formatDate(task[id].data_end) }}
+        </q-chip>
+        <q-chip
+          style="height: 36px; font-size: 8px"
+          text-color="negative"
+          class="urgency q-ma-none"
+        >
+          <!-- urgency -->
+          {{ task[id].urgency }}
+        </q-chip>
+        <q-btn
+          color="grey"
+          round
+          flat
+          dense
+          :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+          @click="expanded = !expanded"
+        />
+      </q-card-section>
+
+      <q-slide-transition>
+        <div v-show="expanded">
+          <q-separator />
+          <q-card-section class="text-subtitle2">
+            <div>
+              <q-btn class="q-pa-none q-ml-sm btn" outline color="positive">
+                Принять
+              </q-btn>
+            </div>
+          </q-card-section>
+        </div>
+      </q-slide-transition>
+    </q-card>
+  </div>
 </template>
 
 <script>
@@ -89,6 +143,7 @@ export default {
   data() {
     return {
       fullTask: false,
+      expanded: false,
     };
   },
   methods: {
@@ -146,5 +201,13 @@ export default {
   max-width: 328px;
   height: 52px;
   border-radius: 12px;
+}
+
+.card-mobile {
+  width: 328px;
+  border-radius: 24px;
+  border: 1px solid #8cc63e;
+  background: #fff;
+  box-shadow: 0px 1px 11.3px 0px rgba(0, 0, 0, 0.25);
 }
 </style>

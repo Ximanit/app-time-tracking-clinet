@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf" class="desktop-only">
     <q-header elevated color="primary">
       <q-toolbar class="q-pa-none">
         <div class="search q-py-md">
@@ -42,6 +42,40 @@
             </div>
           </q-btn>
         </div>
+      </q-toolbar>
+    </q-header>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
+
+  <q-layout view="lHh Lpr lFf" class="mobile-only">
+    <q-header>
+      <q-toolbar class="no-padding tlbr">
+        <q-select
+          :dense="true"
+          outlined
+          v-model="model"
+          :options="options"
+          label="Выбор проекта"
+          bg-color="white"
+          class="q-ml-md q-mt-md q-mb-md q-mr-xl"
+          style="width: 142px"
+        />
+        <q-btn class="btn-refresh q-pa-sm q-mr-md">
+          <q-icon color="dark" name="autorenew" />
+        </q-btn>
+        <q-btn class="btn-q q-pa-sm q-mr-md">
+          <div style="color: black">?</div>
+        </q-btn>
+        <q-btn flat @click="logout()">
+          <img
+            style="width: 32px; height: 32px"
+            src="../assets/exit-icon-mobile.svg"
+            alt="exit-open-logo"
+          />
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -117,5 +151,20 @@ export default defineComponent({
 
 .image-container:hover .second-image {
   opacity: 1; /* При наведении на контейнер вторая картинка становится видимой */
+}
+.btn-refresh {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: rgba(233, 238, 0, 0.16);
+}
+.btn-q {
+  width: 26px;
+  height: 32px;
+  border-radius: 4px;
+  background: rgba(233, 238, 0, 0.16);
+}
+.tlbr {
+  background-color: #fefff4;
 }
 </style>

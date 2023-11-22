@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <!-- TODO переделать -->
-    <div class="q-pt-md" style="margin-left: 314px">
+    <div class="q-pt-md desktop-only" style="margin-left: 314px">
       <div class="row q-gutter-sm">
         <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
           <!-- Передаем данные из хранилища в компонент карточки -->
@@ -9,6 +9,7 @@
         </div>
       </div>
     </div>
+    <div class="mobile-only">Здесь будет вся мобила</div>
   </q-page>
 </template>
 

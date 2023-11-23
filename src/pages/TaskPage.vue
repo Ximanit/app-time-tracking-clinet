@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="desktop-only">
     <div class="absolute-center no-wrap row">
       <q-card class="work-task q-ma-lg">
         <q-card-section class="padding text-bold text-h5">
@@ -151,6 +151,82 @@
       </q-card>
     </q-dialog>
   </q-page>
+
+  <q-page class="mobile-only">
+    <div class="row justify-center">
+      <q-btn
+        class="q-mb-md"
+        text-color="white"
+        style="
+          width: 328px;
+          height: 52px;
+          background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
+        "
+        >Оформить быструю задачу</q-btn
+      >
+    </div>
+
+    <div class="row justify-center">
+      <q-card class="task-mobile">
+        <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
+          Организовать доступ к ЖЗ Иванову И.И. ФЭУ Lorem ipsum dolor sit amet
+        </q-card-section>
+        <q-card-section class="q-pt-none q-px-none">
+          <q-chip
+            style="height: 28px; font-size: 10px"
+            text-color="dark"
+            class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
+          >
+            11.11.2023 - 14.11.2023
+          </q-chip>
+          <q-chip
+            style="height: 28px; font-size: 10px"
+            text-color="negative"
+            class="urgency q-ma-none q-px-sm q-py-xs"
+            >Срочно</q-chip
+          >
+        </q-card-section>
+        <q-card-section
+          class="q-pa-none q-mb-xl"
+          style="font-size: 13px; line-height: 16px"
+        >
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
+          blanditiis tenetur unde suscipit, quam beatae rerum inventore
+          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
+          fugiat deleniti? Eum quasi quidem quibusdam. Lorem ipsum dolor sit
+          amet, consectetur adipisicing elit. Quos blanditiis tenetur unde
+          suscipit, quam beatae rerum inventore consectetur, neque doloribus,
+          cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi
+          quidem quibusdam. Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Quod modi, ex et quia sapiente aspernatur magni adipisci
+          quaerat, ducimus amet velit ut necessitatibus. Eligendi dolorem
+          distinctio velit itaque assumenda dignissimos?
+        </q-card-section>
+        <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
+          00:00:00
+        </q-card-section>
+        <q-card-section class="row justify-between q-pa-none">
+          <q-btn
+            class="q-py-md q-px-lg text-h5"
+            style="width: 117px"
+            color="warning"
+            text-color="dark"
+            outline
+          >
+            Пауза
+          </q-btn>
+          <q-btn
+            class="q-pa-none text-h5 q-py-md"
+            style="width: 163px; border-radius: 4px"
+            color="positive"
+            outline
+          >
+            Завершить
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -249,5 +325,13 @@ export default defineComponent({
   border-radius: 24px;
   border: 1px solid #8cc63e;
   box-shadow: 0px 1px 11.3px 0px rgba(0, 0, 0, 0.25);
+}
+
+.task-mobile {
+  padding: 16px 12px;
+  width: 328px;
+  border-radius: 8px;
+  border: 1px solid #8cc63e;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
 }
 </style>

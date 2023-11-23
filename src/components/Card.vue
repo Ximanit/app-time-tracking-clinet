@@ -76,32 +76,35 @@
   </div>
 
   <div class="mobile-only">
-    <q-card class="q-pa-md card-mobile q-ma-sm">
-      <q-card-section
-        class="text-bold q-px-none q-pt-none"
-        style="font-size: 13px"
-      >
-        <!-- Name -->
-        {{ task[id].task_name }}
-      </q-card-section>
-      <q-card-section class="q-pt-none q-px-none">
-        <q-chip
-          style="height: 36px; font-size: 8px"
-          text-color="dark"
-          class="date text-weight-medium q-px-md q-py-sm q-ma-none q-mr-sm"
+    <q-card class="q-pa-md card-mobile q-mx-md q-mb-sm">
+      <div class="row inline justify-between q-mb-sm">
+        <q-card-section
+          class="text-bold q-pa-none"
+          style="font-size: 13px; width: 260px"
         >
-          <!-- date -->
-          {{ formatDate(task[id].data_start) }}
-          - {{ formatDate(task[id].data_end) }}
-        </q-chip>
-        <q-chip
-          style="height: 36px; font-size: 8px"
-          text-color="negative"
-          class="urgency q-ma-none"
-        >
-          <!-- urgency -->
-          {{ task[id].urgency }}
-        </q-chip>
+          <!-- Name -->
+          {{ task[id].task_name }}
+          <div class="q-mt-sm">
+            <q-chip
+              style="height: 20px; font-size: 8px"
+              text-color="dark"
+              class="date text-weight-medium q-ma-none q-mr-sm"
+            >
+              <!-- date -->
+              {{ formatDate(task[id].data_start) }}
+              - {{ formatDate(task[id].data_end) }}
+            </q-chip>
+            <q-chip
+              style="height: 20px; font-size: 8px"
+              text-color="negative"
+              class="urgency q-ma-none"
+            >
+              <!-- urgency -->
+              {{ task[id].urgency }}
+            </q-chip>
+          </div>
+        </q-card-section>
+
         <q-btn
           color="grey"
           round
@@ -110,14 +113,18 @@
           :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
           @click="expanded = !expanded"
         />
-      </q-card-section>
+      </div>
 
       <q-slide-transition>
         <div v-show="expanded">
-          <q-separator />
-          <q-card-section class="text-subtitle2">
-            <div>
-              <q-btn class="q-pa-none q-ml-sm btn" outline color="positive">
+          <q-card-section class="text-subtitle2 no-padding">
+            <!-- {{ task[id].description }} -->
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+            voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
+            sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
+            Nesciunt fugiat animi perspiciatis.
+            <div class="q-mt-sm">
+              <q-btn class="q-pa-none btn" outline color="positive">
                 Принять
               </q-btn>
             </div>
@@ -193,7 +200,7 @@ export default {
 }
 
 .btn {
-  width: 250px;
+  width: 100%;
   border-radius: 12px;
 }
 
@@ -204,7 +211,7 @@ export default {
 }
 
 .card-mobile {
-  width: 328px;
+  max-width: 328px;
   border-radius: 24px;
   border: 1px solid #8cc63e;
   background: #fff;

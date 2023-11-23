@@ -1,6 +1,6 @@
 <template>
   <q-page class="desktop-only">
-    <div class="absolute-center no-wrap row">
+    <div class="row justify-center">
       <q-card class="work-task q-ma-lg">
         <q-card-section class="padding text-bold text-h5">
           Организовать доступ к ЖЗ Иванову И.И. ФЭУ Lorem ipsum dolor sit amet

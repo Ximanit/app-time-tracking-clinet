@@ -125,7 +125,7 @@
         </q-card-section>
         <q-card-section>
           <q-btn>Отмена</q-btn>
-          <q-btn>Отправить</q-btn>
+          <q-btn @click="back()">Отправить</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -273,6 +273,9 @@ export default defineComponent({
       } catch (error) {
         console.log("ERROR");
       }
+    },
+    back() {
+      this.$router.push(`/`);
     },
   },
 });

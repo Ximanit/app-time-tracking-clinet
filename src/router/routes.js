@@ -14,7 +14,7 @@ const routes = [
         component: IndexPage,
       },
       {
-        path: "/task",
+        path: "/task/:id",
         component: TaskPage,
       },
     ],

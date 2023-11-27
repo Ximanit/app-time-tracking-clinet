@@ -39,6 +39,7 @@
           style="width: 127px"
           outline
           color="positive"
+          @click="taskStart(task[id]._id)"
         >
           Принять
         </q-btn>
@@ -167,6 +168,10 @@ export default {
       return `${day < 10 ? "0" : ""}${day}.${
         month < 10 ? "0" : ""
       }${month}.${year}`;
+    },
+    taskStart(id) {
+      console.log(id);
+      this.$router.push(`/task/:${id}`);
     },
   },
 };

@@ -114,18 +114,23 @@
       </div>
     </div>
     <q-dialog v-model="finishTask">
-      <q-card>
-        <q-card-section> Комментарий по работе </q-card-section>
-        <q-card-section>
-          <q-input placeholder="Комментарий" autogrow> </q-input>
+      <q-card style="width: 328px; height: 328px">
+        <q-card-section style="font-size: 17px">
+          Комментарий по работе
+
+          <q-input outlined autogrow class="q-mb-lg">
+            <q-btn icon="micro"></q-btn>
+          </q-input>
+
+          <div style="font-size: 17px" class="q-mb-lg">
+            Потраченное время на работу
+          </div>
+          <div class="row justify-center" style="font-size: 36px">
+            {{ elapsedTime }}
+          </div>
         </q-card-section>
-        <q-card-section>
-          <div>Потраченное время на работу</div>
-          <div>4 часа 18 минут</div>
-        </q-card-section>
-        <q-card-section>
-          <q-btn>Отмена</q-btn>
-          <q-btn @click="back()">Отправить</q-btn>
+        <q-card-section class="row justify-end">
+          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -241,8 +246,6 @@
 
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
-import Card from "src/components/Card.vue";
-import { useTask } from "../stores/example-store";
 import { api } from "../boot/axios";
 
 export default defineComponent({
@@ -259,10 +262,8 @@ export default defineComponent({
       // Добавьте переменные для отслеживания времени
       startTime: null,
       timerInterval: null,
+      savedElapsedTime: undefined,
     };
-  },
-  components: {
-    Card,
   },
   mounted() {
     this.getTask();
@@ -317,16 +318,30 @@ export default defineComponent({
       try {
         this.stopTimer();
         await Promise.resolve();
+
+        // Сохраните текущее значение elapsedTime при постановке на паузу
+        this.savedElapsedTime = this.elapsedTime;
+
         await api.patch(`/task/onpause/${this.$route.params.id.substring(1)}`);
         this.getTask();
       } catch (error) {
         console.log("ERROR");
       }
     },
+
     async endPause() {
       console.log("Go");
       try {
+        // Если есть сохраненное значение, используйте его
+        if (this.savedElapsedTime !== undefined) {
+          // Обновите elapsedTime, чтобы таймер начал отсчет с сохраненного значения
+          this.elapsedTime = this.savedElapsedTime;
+          this.savedElapsedTime = undefined; // Сброс сохраненного значения
+        }
+
+        // Запустите таймер
         this.startTimer();
+
         await Promise.resolve();
         await api.patch(`/task/offpause/${this.$route.params.id.substring(1)}`);
         this.getTask();

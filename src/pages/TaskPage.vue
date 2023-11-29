@@ -167,7 +167,7 @@
     </div>
 
     <div class="row justify-center">
-      <q-card class="task-mobile">
+      <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
         <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
           Организовать доступ к ЖЗ Иванову И.И. ФЭУ Lorem ipsum dolor sit amet
         </q-card-section>
@@ -203,7 +203,7 @@
           distinctio velit itaque assumenda dignissimos?
         </q-card-section>
         <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
-          00:00:00
+          {{ elapsedTime }}
         </q-card-section>
         <q-card-section class="row justify-between q-pa-none">
           <q-btn
@@ -212,6 +212,7 @@
             color="warning"
             text-color="dark"
             outline
+            @click="startPause()"
           >
             Пауза
           </q-btn>
@@ -220,10 +221,19 @@
             style="width: 163px; border-radius: 4px"
             color="positive"
             outline
+            @click="finishTask = !finishTask"
           >
             Завершить
           </q-btn>
         </q-card-section>
+        <div v-if="task.isPause" class="paused-overlay">
+          <q-btn
+            class="resume-button q-ma-md text-h5"
+            @click.native="endPause()"
+          >
+            Продолжить
+          </q-btn>
+        </div>
       </q-card>
     </div>
   </q-page>
@@ -243,6 +253,12 @@ export default defineComponent({
       fastTask: false,
       model: null,
       options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      task: [],
+      isPause: false,
+      elapsedTime: "00:00:00",
+      // Добавьте переменные для отслеживания времени
+      startTime: null,
+      timerInterval: null,
     };
   },
   components: {
@@ -250,32 +266,73 @@ export default defineComponent({
   },
   mounted() {
     this.getTask();
-  },
-  setup() {
-    const taskStore = useTask();
-    const tasks = ref(null);
-
-    // Отслеживаем изменения в хранилище
-    watchEffect(() => {
-      tasks.value = taskStore.getTaskData;
-    });
-
-    return {
-      tasks,
-    };
+    this.startTimer();
   },
   methods: {
+    startTimer() {
+      // Запомните текущее время как начальное время
+      this.startTime = new Date();
+
+      // Установите интервал для обновления elapsedTime каждую секунду
+      this.timerInterval = setInterval(() => {
+        this.updateElapsedTime();
+      }, 1000);
+    },
+    updateElapsedTime() {
+      // Вычислите разницу между текущим временем и начальным временем
+      const now = new Date();
+      const diff = Math.floor((now - this.startTime) / 1000);
+
+      // Преобразуйте разницу в формат HH:mm:ss и обновите elapsedTime
+      const hours = Math.floor(diff / 3600)
+        .toString()
+        .padStart(2, "0");
+      const minutes = Math.floor((diff % 3600) / 60)
+        .toString()
+        .padStart(2, "0");
+      const seconds = (diff % 60).toString().padStart(2, "0");
+      this.elapsedTime = `${hours}:${minutes}:${seconds}`;
+    },
+    stopTimer() {
+      // Очистите интервал при остановке таймера
+      clearInterval(this.timerInterval);
+    },
     async getTask() {
       try {
-        const res = await api.get("/task/");
-        useTask().setTaskData(res.data);
-        this.tasks = res.data;
+        const res = await api.get(
+          `/task/${this.$route.params.id.substring(1)}`
+        );
+        this.task = res.data;
+        this.isPause = this.task.isPause;
+        console.log(this.isPause);
       } catch (error) {
         console.log("ERROR");
       }
     },
     back() {
       this.$router.push(`/`);
+    },
+    async startPause() {
+      console.log("start pause", this.$route.params.id.substring(1));
+      try {
+        this.stopTimer();
+        await Promise.resolve();
+        await api.patch(`/task/onpause/${this.$route.params.id.substring(1)}`);
+        this.getTask();
+      } catch (error) {
+        console.log("ERROR");
+      }
+    },
+    async endPause() {
+      console.log("Go");
+      try {
+        this.startTimer();
+        await Promise.resolve();
+        await api.patch(`/task/offpause/${this.$route.params.id.substring(1)}`);
+        this.getTask();
+      } catch (error) {
+        console.log("ERROR");
+      }
     },
   },
 });
@@ -336,5 +393,28 @@ export default defineComponent({
   border-radius: 8px;
   border: 1px solid #8cc63e;
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.paused-card {
+  opacity: 0.7;
+  position: relative;
+}
+
+.paused-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-mobile .resume-button {
+  z-index: 1;
+  border-radius: 8px;
+  border: 1px solid #e9ee00;
+  background: #fbfcd6;
 }
 </style>

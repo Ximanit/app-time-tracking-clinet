@@ -78,8 +78,8 @@
     </q-dialog>
   </div>
 
-  <div class="mobile-only">
-    <q-card class="q-pa-md card-mobile q-mx-md q-mb-sm">
+  <div class="mobile-only row justify-center">
+    <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
@@ -127,7 +127,12 @@
             sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
             Nesciunt fugiat animi perspiciatis.
             <div class="q-mt-sm">
-              <q-btn class="q-pa-none btn" outline color="positive">
+              <q-btn
+                class="q-pa-none btn"
+                outline
+                color="positive"
+                @click="taskStart(task[id]._id)"
+              >
                 Принять
               </q-btn>
             </div>

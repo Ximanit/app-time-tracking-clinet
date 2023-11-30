@@ -118,8 +118,10 @@
         <q-card-section style="font-size: 17px">
           Комментарий по работе
 
-          <q-input outlined autogrow class="q-mb-lg">
-            <q-btn icon="micro"></q-btn>
+          <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
+            <template v-slot:append>
+              <q-btn @click="startButton" round dense flat icon="mic" />
+            </template>
           </q-input>
 
           <div style="font-size: 17px" class="q-mb-lg">
@@ -135,23 +137,37 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="fastTask"
-      ><q-card>
-        <q-card-section> Оформить быструю задачу </q-card-section>
-        <q-card-section>
+      ><q-card style="width: 328px;min-height: 400px;">
+        <q-card-section style="font-size: 17px;" class="text-bold">
+          Оформить быструю задачу
+        </q-card-section>
+        <q-card-section style="margin-bottom: 110px;">
           <div>Введите название быстрой задачи</div>
-          <q-input autogrow> </q-input>
-        </q-card-section>
-        <q-card-section>
+          <q-input
+            v-model="fastTaskTitle"
+            class="q-mb-md"
+            :dense="true"
+            outlined
+            autogrow
+          >
+          </q-input>
+
           <div>Выберите проект</div>
-          <q-select v-model="model" :options="options" label="Standard" />
-        </q-card-section>
-        <q-card-section>
+          <q-select
+            v-model="model"
+            outlined
+            :options="options"
+            label="Выбор проекта"
+            :dense="true"
+          />
+
           <div>Комментарий</div>
-          <q-input autogrow> </q-input>
+          <q-input v-model="fastTaskDes" outlined :dense="true" autogrow>
+          </q-input>
         </q-card-section>
-        <q-card-section>
-          <q-btn>Отмена</q-btn>
-          <q-btn>Создать</q-btn>
+        <q-card-section class="row justify-between">
+          <q-btn color="8F8F8F" outline>Отмена</q-btn>
+          <q-btn color="positive" outline>Создать</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -167,6 +183,7 @@
           height: 52px;
           background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
         "
+        @click="fastTask = !fastTask"
         >Оформить быструю задачу</q-btn
       >
     </div>
@@ -174,7 +191,7 @@
     <div class="row justify-center">
       <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
         <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
-          Организовать доступ к ЖЗ Иванову И.И. ФЭУ Lorem ipsum dolor sit amet
+          {{ task.task_name }}
         </q-card-section>
         <q-card-section class="q-pt-none q-px-none">
           <q-chip
@@ -188,24 +205,17 @@
             style="height: 28px; font-size: 10px"
             text-color="negative"
             class="urgency q-ma-none q-px-sm q-py-xs"
-            >Срочно</q-chip
+            >{{ task.urgency }}</q-chip
           >
         </q-card-section>
         <q-card-section
           class="q-pa-none q-mb-xl"
           style="font-size: 13px; line-height: 16px"
         >
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur unde suscipit, quam beatae rerum inventore
-          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-          fugiat deleniti? Eum quasi quidem quibusdam. Lorem ipsum dolor sit
-          amet, consectetur adipisicing elit. Quos blanditiis tenetur unde
-          suscipit, quam beatae rerum inventore consectetur, neque doloribus,
-          cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi
-          quidem quibusdam. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quod modi, ex et quia sapiente aspernatur magni adipisci
-          quaerat, ducimus amet velit ut necessitatibus. Eligendi dolorem
-          distinctio velit itaque assumenda dignissimos?
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+          voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
+          ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
+          fugiat animi perspiciatis.
         </q-card-section>
         <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
           {{ elapsedTime }}
@@ -255,7 +265,12 @@ export default defineComponent({
       finishTask: false,
       fastTask: false,
       model: null,
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [
+        "Журнал заявок",
+        "Мобильное приложение",
+        "Сайт дополнительного обучения",
+        "Главная страница"
+      ],
       task: [],
       isPause: false,
       elapsedTime: "00:00:00",
@@ -263,11 +278,18 @@ export default defineComponent({
       startTime: null,
       timerInterval: null,
       savedElapsedTime: undefined,
+      finalTranscript: "",
+      recognizing: false,
+      ignoreOnEnd: false,
+      recognition: null,
+      fastTaskTitle: "",
+      fastTaskDes: ""
     };
   },
   mounted() {
     this.getTask();
     this.startTimer();
+    this.initRecognition();
   },
   methods: {
     startTimer() {
@@ -349,7 +371,63 @@ export default defineComponent({
         console.log("ERROR");
       }
     },
-  },
+    initRecognition() {
+      this.finalTranscript = " ";
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognitionEvent =
+        window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+      if (SpeechRecognition) {
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
+
+        this.recognition.onstart = () => {
+          this.recognizing = true;
+        };
+
+        this.recognition.onerror = event => {
+          if (event.error === "no-speech") {
+            this.ignoreOnEnd = true;
+          }
+          if (event.error === "audio-capture") {
+            this.ignoreOnEnd = true;
+          }
+          if (event.error === "not-allowed") {
+            this.ignoreOnEnd = true;
+          }
+        };
+
+        this.recognition.onresult = event => {
+          var interimTranscript = "";
+          if (typeof event.results === "undefined") {
+            this.recognition.onend = null;
+            this.recognition.stop();
+            this.upgrade();
+            return;
+          }
+          for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              this.finalTranscript = event.results[i][0].transcript;
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
+          }
+        };
+      }
+    },
+    startButton() {
+      if (this.recognizing) {
+        this.recognition.stop();
+        return;
+      }
+      this.finalTranscript = "";
+      this.recognition.lang = "ru-Ru";
+      this.recognition.start();
+      this.ignoreOnEnd = false;
+    }
+  }
 });
 </script>
 

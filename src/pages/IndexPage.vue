@@ -28,34 +28,34 @@ import { api } from "../boot/axios";
 export default defineComponent({
   name: "IndexPage",
   components: {
-    Card,
+    Card
   },
   mounted() {
     this.getTask();
   },
   setup() {
-    const taskStore = useTask();
+    // const taskStore = useTask();
     const tasks = ref(null);
 
     // Отслеживаем изменения в хранилище
     watchEffect(() => {
-      tasks.value = taskStore.getTaskData;
+      // tasks.value = taskStore.getTaskData;
     });
 
     return {
-      tasks,
+      tasks
     };
   },
   methods: {
     async getTask() {
       try {
         const res = await api.get("/task/");
-        useTask().setTaskData(res.data);
+        // useTask().setTaskData(res.data);
         this.tasks = res.data;
       } catch (error) {
         console.log("ERROR");
       }
-    },
-  },
+    }
+  }
 });
 </script>

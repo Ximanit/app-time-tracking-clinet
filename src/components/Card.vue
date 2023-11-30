@@ -121,11 +121,11 @@
       <q-slide-transition>
         <div v-show="expanded">
           <q-card-section class="text-subtitle2 no-padding">
-            <!-- {{ task[id].description }} -->
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+            {{ task[id].description }}
+            <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
             voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
             sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
-            Nesciunt fugiat animi perspiciatis.
+            Nesciunt fugiat animi perspiciatis. -->
             <div class="q-mt-sm">
               <q-btn
                 class="q-pa-none btn"
@@ -148,17 +148,17 @@ export default {
   props: {
     task: {
       type: Object,
-      required: true,
+      required: true
     },
     id: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       fullTask: false,
-      expanded: false,
+      expanded: false
     };
   },
   methods: {
@@ -177,8 +177,8 @@ export default {
     taskStart(id) {
       console.log(id);
       this.$router.push(`/task/:${id}`);
-    },
-  },
+    }
+  }
 };
 </script>
 

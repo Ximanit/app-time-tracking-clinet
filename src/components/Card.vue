@@ -1,6 +1,7 @@
 <template>
   <div class="desktop-only">
-    <q-card class="q-pa-md card q-ma-sm">
+    <q-card :class="{ 'card-paused': false }" class="q-pa-md card q-ma-sm">
+      <div v-if="true" class="pause-icon">❚❚</div>
       <q-card-section
         class="text-bold q-px-none q-pt-none"
         style="font-size: 18px"
@@ -13,15 +14,16 @@
           text-color="dark"
           class="date text-weight-medium text-body2 q-px-md q-py-sm q-ma-none q-mr-sm"
         >
-          {{ formatDate(task[id].data_start) }}
-          - {{ formatDate(task[id].data_end) }}
+          {{ formatDate(task[id].data_start) }} -
+          {{ formatDate(task[id].data_end) }}
         </q-chip>
         <q-chip
           style="height: 36px"
           text-color="negative"
           class="urgency q-ma-none"
-          >{{ task[id].urgency }}</q-chip
         >
+          {{ task[id].urgency }}
+        </q-chip>
       </q-card-section>
       <div>
         <q-btn
@@ -37,6 +39,7 @@
           style="width: 127px"
           outline
           color="positive"
+          @click="taskStart(task[id]._id)"
         >
           Принять
         </q-btn>
@@ -75,8 +78,8 @@
     </q-dialog>
   </div>
 
-  <div class="mobile-only">
-    <q-card class="q-pa-md card-mobile q-mx-md q-mb-sm">
+  <div class="mobile-only row justify-center">
+    <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
@@ -118,13 +121,18 @@
       <q-slide-transition>
         <div v-show="expanded">
           <q-card-section class="text-subtitle2 no-padding">
-            <!-- {{ task[id].description }} -->
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+            {{ task[id].description }}
+            <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
             voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
             sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
-            Nesciunt fugiat animi perspiciatis.
+            Nesciunt fugiat animi perspiciatis. -->
             <div class="q-mt-sm">
-              <q-btn class="q-pa-none btn" outline color="positive">
+              <q-btn
+                class="q-pa-none btn"
+                outline
+                color="positive"
+                @click="taskStart(task[id]._id)"
+              >
                 Принять
               </q-btn>
             </div>
@@ -140,17 +148,17 @@ export default {
   props: {
     task: {
       type: Object,
-      required: true,
+      required: true
     },
     id: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       fullTask: false,
-      expanded: false,
+      expanded: false
     };
   },
   methods: {
@@ -166,16 +174,32 @@ export default {
         month < 10 ? "0" : ""
       }${month}.${year}`;
     },
-  },
+    taskStart(id) {
+      console.log(id);
+      this.$router.push(`/task/:${id}`);
+    }
+  }
 };
 </script>
 
 <style scoped>
+.card-paused {
+  background: rgba(0, 0, 0, 0.5); /* Затемнение экрана при паузе */
+}
+
+.pause-icon {
+  font-size: 24px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .card {
   width: 420px;
   border-radius: 24px;
   border: 1px solid #8cc63e;
-  background: #fff;
   box-shadow: 0px 1px 11.3px 0px rgba(0, 0, 0, 0.25);
 }
 

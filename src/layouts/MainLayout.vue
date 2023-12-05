@@ -95,7 +95,12 @@ export default defineComponent({
   setup() {
     return {
       model: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [
+        "Журнал заявок",
+        "Мобильное приложение",
+        "Сайт дополнительного обучения",
+        "Главная страница"
+      ]
     };
   },
   methods: {
@@ -109,8 +114,8 @@ export default defineComponent({
       } catch (error) {
         console.log("ERROR");
       }
-    },
-  },
+    }
+  }
 });
 </script>
 

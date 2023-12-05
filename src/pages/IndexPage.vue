@@ -11,7 +11,7 @@
     </div>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="capacitor-only">
     <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
       <!-- Передаем данные из хранилища в компонент карточки -->
       <Card style="width: 328px; height: 92px" :task="tasks" :id="id" />
@@ -28,7 +28,7 @@ import { api } from "../boot/axios";
 export default defineComponent({
   name: "IndexPage",
   components: {
-    Card
+    Card,
   },
   mounted() {
     this.getTask();
@@ -43,7 +43,7 @@ export default defineComponent({
     });
 
     return {
-      tasks
+      tasks,
     };
   },
   methods: {
@@ -55,7 +55,7 @@ export default defineComponent({
       } catch (error) {
         console.log("ERROR");
       }
-    }
-  }
+    },
+  },
 });
 </script>

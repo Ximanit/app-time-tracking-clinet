@@ -78,7 +78,7 @@
     </q-dialog>
   </div>
 
-  <div class="mobile-only row justify-center">
+  <div class="capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
@@ -148,17 +148,17 @@ export default {
   props: {
     task: {
       type: Object,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       fullTask: false,
-      expanded: false
+      expanded: false,
     };
   },
   methods: {
@@ -177,8 +177,8 @@ export default {
     taskStart(id) {
       console.log(id);
       this.$router.push(`/task/:${id}`);
-    }
-  }
+    },
+  },
 };
 </script>
 

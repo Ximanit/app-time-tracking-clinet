@@ -137,11 +137,11 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="fastTask"
-      ><q-card style="width: 328px;min-height: 400px;">
-        <q-card-section style="font-size: 17px;" class="text-bold">
+      ><q-card style="width: 328px; min-height: 400px">
+        <q-card-section style="font-size: 17px" class="text-bold">
           Оформить быструю задачу
         </q-card-section>
-        <q-card-section style="margin-bottom: 110px;">
+        <q-card-section style="margin-bottom: 110px">
           <div>Введите название быстрой задачи</div>
           <q-input
             v-model="fastTaskTitle"
@@ -173,7 +173,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="capacitor-only">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -269,7 +269,7 @@ export default defineComponent({
         "Журнал заявок",
         "Мобильное приложение",
         "Сайт дополнительного обучения",
-        "Главная страница"
+        "Главная страница",
       ],
       task: [],
       isPause: false,
@@ -283,7 +283,7 @@ export default defineComponent({
       ignoreOnEnd: false,
       recognition: null,
       fastTaskTitle: "",
-      fastTaskDes: ""
+      fastTaskDes: "",
     };
   },
   mounted() {
@@ -387,7 +387,7 @@ export default defineComponent({
           this.recognizing = true;
         };
 
-        this.recognition.onerror = event => {
+        this.recognition.onerror = (event) => {
           if (event.error === "no-speech") {
             this.ignoreOnEnd = true;
           }
@@ -399,7 +399,7 @@ export default defineComponent({
           }
         };
 
-        this.recognition.onresult = event => {
+        this.recognition.onresult = (event) => {
           var interimTranscript = "";
           if (typeof event.results === "undefined") {
             this.recognition.onend = null;
@@ -426,8 +426,8 @@ export default defineComponent({
       this.recognition.lang = "ru-Ru";
       this.recognition.start();
       this.ignoreOnEnd = false;
-    }
-  }
+    },
+  },
 });
 </script>
 

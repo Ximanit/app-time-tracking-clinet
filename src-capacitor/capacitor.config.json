@@ -1,0 +1,9 @@
+{
+  "appId": "org.capacitor.quasar.app",
+  "appName": "app-time-tracking",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "url": "http://172.28.48.1:9500"
+  }
+}

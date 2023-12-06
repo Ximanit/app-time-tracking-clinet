@@ -11,7 +11,7 @@
     </div>
   </q-page>
 
-  <q-page class="capacitor-only">
+  <q-page class="mobile-only">
     <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
       <!-- Передаем данные из хранилища в компонент карточки -->
       <Card style="width: 328px; height: 92px" :task="tasks" :id="id" />

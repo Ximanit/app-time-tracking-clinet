@@ -32,7 +32,7 @@
       </q-card-section>
     </q-card>
   </div>
-  <div class="q-mb-none capacitor-only background-mobile">
+  <div class="q-mb-none mobile-only background-mobile">
     <div class="text-h4 text-center title">Авторизация</div>
     <q-img
       src="../assets/mobile-icon.svg"

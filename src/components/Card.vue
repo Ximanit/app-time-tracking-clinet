@@ -131,7 +131,7 @@
                 class="q-pa-none btn"
                 outline
                 color="positive"
-                @click="taskStart(task[id]._id)"
+                @click="micro(task[id]._id)"
               >
                 Принять
               </q-btn>
@@ -144,6 +144,8 @@
 </template>
 
 <script>
+import { Browser } from "@capacitor/browser";
+
 export default {
   props: {
     task: {
@@ -162,6 +164,11 @@ export default {
     };
   },
   methods: {
+    async micro(id) {
+      await Browser.open({
+        url: `http://192.168.1.172:9500/#/task/:${id}`,
+      });
+    },
     showFullTask() {
       this.fullTask = true;
     },

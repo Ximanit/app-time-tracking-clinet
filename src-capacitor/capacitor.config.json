@@ -3,7 +3,6 @@
   "appName": "app-time-tracking",
   "webDir": "www",
   "server": {
-    "androidScheme": "http",
-    "url": "http://172.28.48.1:9500"
+    "androidScheme": "http"
   }
 }

@@ -88,7 +88,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { api } from "../boot/axios";
-import { useTask } from "../stores/example-store";
 
 export default defineComponent({
   name: "MainLayout",
@@ -99,8 +98,8 @@ export default defineComponent({
         "Журнал заявок",
         "Мобильное приложение",
         "Сайт дополнительного обучения",
-        "Главная страница"
-      ]
+        "Главная страница",
+      ],
     };
   },
   methods: {
@@ -110,12 +109,11 @@ export default defineComponent({
     async updateTask() {
       try {
         const res = await api.get("/task/");
-        useTask().setTaskData(res.data);
       } catch (error) {
         console.log("ERROR");
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

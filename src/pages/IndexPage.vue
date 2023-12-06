@@ -22,7 +22,6 @@
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
 import Card from "src/components/Card.vue";
-import { useTask } from "../stores/example-store";
 import { api } from "../boot/axios";
 
 export default defineComponent({
@@ -36,12 +35,6 @@ export default defineComponent({
   setup() {
     // const taskStore = useTask();
     const tasks = ref(null);
-
-    // Отслеживаем изменения в хранилище
-    watchEffect(() => {
-      // tasks.value = taskStore.getTaskData;
-    });
-
     return {
       tasks,
     };
@@ -50,7 +43,6 @@ export default defineComponent({
     async getTask() {
       try {
         const res = await api.get("/task/");
-        // useTask().setTaskData(res.data);
         this.tasks = res.data;
       } catch (error) {
         console.log("ERROR");

@@ -339,7 +339,7 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
-import { Browser } from "@capacitor/browser";
+// import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -374,6 +374,9 @@ export default defineComponent({
     this.startTimer();
   },
   methods: {
+    // async micro() {
+    //   await Browser.open({ url: "http://capacitorjs.com/" });
+    // },
     startTimer() {
       // Запомните текущее время как начальное время
       this.startTime = new Date();

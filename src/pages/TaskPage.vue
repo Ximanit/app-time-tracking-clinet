@@ -1,7 +1,10 @@
 <template>
   <q-page class="desktop-only">
     <div class="row justify-center">
-      <q-card class="work-task q-ma-lg">
+      <q-card
+        class="work-task q-ma-lg"
+        :class="{ 'paused-card': task.isPause }"
+      >
         <q-card-section class="padding text-bold text-h5">
           Организовать доступ к ЖЗ Иванову И.И. ФЭУ Lorem ipsum dolor sit amet
         </q-card-section>
@@ -45,6 +48,7 @@
             color="warning"
             text-color="dark"
             outline
+            @click="startPause()"
           >
             <q-icon name="pause" />
             Пауза
@@ -58,9 +62,17 @@
             Завершить
           </q-btn>
         </q-card-section>
+        <div v-if="task.isPause" class="paused-overlay">
+          <q-btn
+            class="resume-button q-ma-md text-h5"
+            @click.native="endPause()"
+          >
+            Продолжить
+          </q-btn>
+        </div>
       </q-card>
       <div>
-        <q-card class="work-list q-ma-lg q-pa-none">
+        <q-card class="work-list q-ma-lg q-pa-none" :disabled="isPause">
           <q-card-section class="row justify-center text-h4 q-mb-lg no-padding">
             Список задач
           </q-card-section>
@@ -120,7 +132,13 @@
 
           <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
             <template v-slot:append>
-              <q-btn @click="startButton" round dense flat icon="mic" />
+              <q-btn
+                @click="startButton()"
+                round
+                dense
+                flat
+                :icon="isRecording ? 'mic_off' : 'mic'"
+              />
             </template>
           </q-input>
 
@@ -319,7 +337,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watchEffect } from "vue";
+import { defineComponent } from "vue";
 import { api } from "../boot/axios";
 // import { Browser } from "@capacitor/browser";
 
@@ -334,7 +352,7 @@ export default defineComponent({
         "Журнал заявок",
         "Мобильное приложение",
         "Сайт дополнительного обучения",
-        "Главная страница",
+        "Главная страница"
       ],
       task: [],
       isPause: false,
@@ -343,12 +361,12 @@ export default defineComponent({
       startTime: null,
       timerInterval: null,
       savedElapsedTime: undefined,
-      finalTranscript: "",
-      recognizing: false,
-      ignoreOnEnd: false,
       recognition: null,
       fastTaskTitle: "",
       fastTaskDes: "",
+      isRecording: false,
+      mediaRecorder: null,
+      audioChunks: []
     };
   },
   mounted() {
@@ -407,6 +425,8 @@ export default defineComponent({
       console.log("start pause", this.$route.params.id.substring(1));
       try {
         this.stopTimer();
+        this.isPause = false;
+        console.log(this.isPause);
         await Promise.resolve();
 
         // Сохраните текущее значение elapsedTime при постановке на паузу
@@ -418,7 +438,6 @@ export default defineComponent({
         console.log("ERROR");
       }
     },
-
     async endPause() {
       console.log("Go");
       try {
@@ -428,6 +447,8 @@ export default defineComponent({
           this.elapsedTime = this.savedElapsedTime;
           this.savedElapsedTime = undefined; // Сброс сохраненного значения
         }
+        this.isPause = true;
+        console.log(this.isPause);
 
         // Запустите таймер
         this.startTimer();
@@ -439,63 +460,54 @@ export default defineComponent({
         console.log("ERROR");
       }
     },
-    initRecognition() {
-      this.finalTranscript = " ";
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      const SpeechRecognitionEvent =
-        window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
-      if (SpeechRecognition) {
-        this.recognition = new SpeechRecognition();
-        this.recognition.continuous = true;
-        this.recognition.interimResults = true;
-
-        this.recognition.onstart = () => {
-          this.recognizing = true;
-        };
-
-        this.recognition.onerror = (event) => {
-          if (event.error === "no-speech") {
-            this.ignoreOnEnd = true;
-          }
-          if (event.error === "audio-capture") {
-            this.ignoreOnEnd = true;
-          }
-          if (event.error === "not-allowed") {
-            this.ignoreOnEnd = true;
-          }
-        };
-
-        this.recognition.onresult = (event) => {
-          var interimTranscript = "";
-          if (typeof event.results === "undefined") {
-            this.recognition.onend = null;
-            this.recognition.stop();
-            this.upgrade();
-            return;
-          }
-          for (var i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-              this.finalTranscript = event.results[i][0].transcript;
-            } else {
-              interimTranscript += event.results[i][0].transcript;
-            }
-          }
-        };
-      }
-    },
     startButton() {
-      if (this.recognizing) {
-        this.recognition.stop();
-        return;
+      const serverURL =
+        "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
+
+      if (!this.isRecording) {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then(stream => {
+            this.mediaRecorder = new MediaRecorder(stream);
+
+            this.mediaRecorder.addEventListener("dataavailable", event => {
+              this.audioChunks.push(event.data);
+            });
+
+            this.mediaRecorder.addEventListener("stop", () => {
+              const audioBlob = new Blob(this.audioChunks);
+              const fd = new FormData();
+              fd.append("audio", audioBlob);
+
+              // Отправка на сервер
+              fetch(serverURL, {
+                method: "POST",
+                body: fd
+              })
+                .then(response => response.json())
+                .then(data => {
+                  this.finalTranscript = data.text;
+                  console.log(data.text);
+                })
+                .catch(error => {
+                  console.error("Error during server request:", error);
+                });
+
+              this.audioChunks = [];
+            });
+
+            this.mediaRecorder.start();
+            this.isRecording = true;
+          })
+          .catch(error => {
+            console.error("Error accessing microphone:", error);
+          });
+      } else {
+        this.mediaRecorder.stop();
+        this.isRecording = false;
       }
-      this.finalTranscript = "";
-      this.recognition.lang = "ru-Ru";
-      this.recognition.start();
-      this.ignoreOnEnd = false;
-    },
-  },
+    }
+  }
 });
 </script>
 
@@ -573,6 +585,12 @@ export default defineComponent({
 }
 
 .task-mobile .resume-button {
+  z-index: 1;
+  border-radius: 8px;
+  border: 1px solid #e9ee00;
+  background: #fbfcd6;
+}
+.work-task .resume-button {
   z-index: 1;
   border-radius: 8px;
   border: 1px solid #e9ee00;

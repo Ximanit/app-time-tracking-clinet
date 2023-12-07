@@ -25,18 +25,19 @@
           {{ task[id].urgency }}
         </q-chip>
       </q-card-section>
-      <div>
+      <div class="row">
         <q-btn
-          class="q-pa-none btn"
+          class="q-pa-none col"
+          style="border-radius: 12px"
           outline
-          color="positive"
+          color="8F8F8F"
           @click="this.fullTask = true"
         >
           Подробнее
         </q-btn>
         <q-btn
-          class="q-pa-none q-ml-sm btn"
-          style="width: 127px"
+          class="q-pa-none q-ml-sm col"
+          style="border-radius: 12px"
           outline
           color="positive"
           @click="taskStart(task[id]._id)"
@@ -47,7 +48,7 @@
     </q-card>
     <q-dialog v-model="fullTask">
       <q-card class="full-card">
-        <q-card-section class="text-bold q-px-none text-h5">
+        <q-card-section class="text-bold q-pt-none q-px-none text-h5">
           {{ task[id].task_name }}
         </q-card-section>
         <q-card-section class="q-pt-none q-px-none">
@@ -231,12 +232,11 @@ export default {
 }
 
 .btn {
-  width: 100%;
-  border-radius: 12px;
+  width: 250px;
 }
 
 .btn-full {
-  max-width: 328px;
+  width: 300px;
   height: 52px;
   border-radius: 12px;
 }

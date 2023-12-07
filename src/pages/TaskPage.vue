@@ -339,7 +339,6 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
-import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",

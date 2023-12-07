@@ -151,6 +151,11 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true,
+      backButtonExit: true / false / "*" / ["/login", "/home", "/my-page"],
+
+      // On the other hand, the following completely
+      // disables Quasar's back button management.
+      backButton: true / false,
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron

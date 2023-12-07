@@ -137,11 +137,11 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="fastTask"
-      ><q-card style="width: 328px;min-height: 400px;">
-        <q-card-section style="font-size: 17px;" class="text-bold">
+      ><q-card style="width: 328px; min-height: 400px">
+        <q-card-section style="font-size: 17px" class="text-bold">
           Оформить быструю задачу
         </q-card-section>
-        <q-card-section style="margin-bottom: 110px;">
+        <q-card-section style="margin-bottom: 110px">
           <div>Введите название быстрой задачи</div>
           <q-input
             v-model="fastTaskTitle"
@@ -251,12 +251,77 @@
         </div>
       </q-card>
     </div>
+    <q-dialog v-model="finishTask">
+      <q-card style="width: 328px; height: 328px">
+        <q-card-section style="font-size: 17px">
+          Комментарий по работе
+
+          <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
+            <template v-slot:append>
+              <q-btn
+                @click="startButton()"
+                round
+                dense
+                flat
+                :icon="isRecording ? 'mic_off' : 'mic'"
+              />
+            </template>
+          </q-input>
+
+          <div style="font-size: 17px" class="q-mb-lg">
+            Потраченное время на работу
+          </div>
+          <div class="row justify-center" style="font-size: 36px">
+            {{ elapsedTime }}
+          </div>
+        </q-card-section>
+        <q-card-section class="row justify-end">
+          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="fastTask"
+      ><q-card style="width: 328px; min-height: 400px">
+        <q-card-section style="font-size: 17px" class="text-bold">
+          Оформить быструю задачу
+        </q-card-section>
+        <q-card-section style="margin-bottom: 110px">
+          <div>Введите название быстрой задачи</div>
+          <q-input
+            v-model="fastTaskTitle"
+            class="q-mb-md"
+            :dense="true"
+            outlined
+            autogrow
+          >
+          </q-input>
+
+          <div>Выберите проект</div>
+          <q-select
+            v-model="model"
+            outlined
+            :options="options"
+            label="Выбор проекта"
+            :dense="true"
+          />
+
+          <div>Комментарий</div>
+          <q-input v-model="fastTaskDes" outlined :dense="true" autogrow>
+          </q-input>
+        </q-card-section>
+        <q-card-section class="row justify-between">
+          <q-btn color="8F8F8F" outline>Отмена</q-btn>
+          <q-btn color="positive" outline>Создать</q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
 import { api } from "../boot/axios";
+import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -269,7 +334,7 @@ export default defineComponent({
         "Журнал заявок",
         "Мобильное приложение",
         "Сайт дополнительного обучения",
-        "Главная страница"
+        "Главная страница",
       ],
       task: [],
       isPause: false,
@@ -283,15 +348,18 @@ export default defineComponent({
       ignoreOnEnd: false,
       recognition: null,
       fastTaskTitle: "",
-      fastTaskDes: ""
+      fastTaskDes: "",
     };
   },
   mounted() {
     this.getTask();
     this.startTimer();
-    this.initRecognition();
+    // this.initRecognition();
   },
   methods: {
+    async micro() {
+      await Browser.open({ url: "http://capacitorjs.com/" });
+    },
     startTimer() {
       // Запомните текущее время как начальное время
       this.startTime = new Date();
@@ -387,7 +455,7 @@ export default defineComponent({
           this.recognizing = true;
         };
 
-        this.recognition.onerror = event => {
+        this.recognition.onerror = (event) => {
           if (event.error === "no-speech") {
             this.ignoreOnEnd = true;
           }
@@ -399,7 +467,7 @@ export default defineComponent({
           }
         };
 
-        this.recognition.onresult = event => {
+        this.recognition.onresult = (event) => {
           var interimTranscript = "";
           if (typeof event.results === "undefined") {
             this.recognition.onend = null;
@@ -426,8 +494,8 @@ export default defineComponent({
       this.recognition.lang = "ru-Ru";
       this.recognition.start();
       this.ignoreOnEnd = false;
-    }
-  }
+    },
+  },
 });
 </script>
 

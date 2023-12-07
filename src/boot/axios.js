@@ -9,7 +9,7 @@ import axios from "axios";
 // for each client)
 const api = axios.create({
   // baseURL: "http://localhost:5000"
-  baseURL: "https://app-time-tracking.onrender.com"
+  baseURL: "https://app-time-tracking.onrender.com",
 });
 
 export default boot(({ app }) => {

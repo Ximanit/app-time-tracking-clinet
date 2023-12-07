@@ -78,7 +78,7 @@
     </q-dialog>
   </div>
 
-  <div class="mobile-only row justify-center">
+  <div class="capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
@@ -131,7 +131,7 @@
                 class="q-pa-none btn"
                 outline
                 color="positive"
-                @click="taskStart(task[id]._id)"
+                @click="micro(task[id]._id)"
               >
                 Принять
               </q-btn>
@@ -144,24 +144,31 @@
 </template>
 
 <script>
+import { Browser } from "@capacitor/browser";
+
 export default {
   props: {
     task: {
       type: Object,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       fullTask: false,
-      expanded: false
+      expanded: false,
     };
   },
   methods: {
+    async micro(id) {
+      await Browser.open({
+        url: `http://192.168.1.172:9500/#/task/:${id}`,
+      });
+    },
     showFullTask() {
       this.fullTask = true;
     },
@@ -177,8 +184,8 @@ export default {
     taskStart(id) {
       console.log(id);
       this.$router.push(`/task/:${id}`);
-    }
-  }
+    },
+  },
 };
 </script>
 

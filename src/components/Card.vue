@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { Browser } from "@capacitor/browser";
+// import { Browser } from "@capacitor/browser";
 
 export default {
   props: {
@@ -164,11 +164,11 @@ export default {
     };
   },
   methods: {
-    async micro(id) {
-      await Browser.open({
-        url: `http://192.168.1.172:9500/#/task/:${id}`,
-      });
-    },
+    // async micro(id) {
+    //   await Browser.open({
+    //     url: `http://192.168.1.172:9500/#/task/:${id}`,
+    //   });
+    // },
     showFullTask() {
       this.fullTask = true;
     },

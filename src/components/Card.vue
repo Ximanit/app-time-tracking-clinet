@@ -79,7 +79,7 @@
     </q-dialog>
   </div>
 
-  <div class="capacitor-only row justify-center">
+  <div class="mobile-only capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section

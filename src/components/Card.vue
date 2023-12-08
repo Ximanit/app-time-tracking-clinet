@@ -145,7 +145,7 @@
 </template>
 
 <script>
-// import { Browser } from "@capacitor/browser";
+import { Browser } from "@capacitor/browser";
 
 export default {
   props: {

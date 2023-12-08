@@ -339,7 +339,6 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
-import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -352,7 +351,7 @@ export default defineComponent({
         "Журнал заявок",
         "Мобильное приложение",
         "Сайт дополнительного обучения",
-        "Главная страница"
+        "Главная страница",
       ],
       task: [],
       isPause: false,
@@ -366,7 +365,7 @@ export default defineComponent({
       fastTaskDes: "",
       isRecording: false,
       mediaRecorder: null,
-      audioChunks: []
+      audioChunks: [],
     };
   },
   mounted() {
@@ -463,10 +462,10 @@ export default defineComponent({
       if (!this.isRecording) {
         navigator.mediaDevices
           .getUserMedia({ audio: true })
-          .then(stream => {
+          .then((stream) => {
             this.mediaRecorder = new MediaRecorder(stream);
 
-            this.mediaRecorder.addEventListener("dataavailable", event => {
+            this.mediaRecorder.addEventListener("dataavailable", (event) => {
               this.audioChunks.push(event.data);
             });
 
@@ -478,14 +477,14 @@ export default defineComponent({
               // Отправка на сервер
               fetch(serverURL, {
                 method: "POST",
-                body: fd
+                body: fd,
               })
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => response.json())
+                .then((data) => {
                   this.finalTranscript = data.text;
                   console.log(data.text);
                 })
-                .catch(error => {
+                .catch((error) => {
                   console.error("Error during server request:", error);
                 });
 
@@ -495,15 +494,15 @@ export default defineComponent({
             this.mediaRecorder.start();
             this.isRecording = true;
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error accessing microphone:", error);
           });
       } else {
         this.mediaRecorder.stop();
         this.isRecording = false;
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

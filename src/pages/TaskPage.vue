@@ -415,6 +415,7 @@ export default defineComponent({
       }
     },
     back() {
+      window.close();
       this.$router.push(`/`);
     },
     async startPause() {

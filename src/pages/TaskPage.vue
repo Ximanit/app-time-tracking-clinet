@@ -294,7 +294,9 @@
           </div>
         </q-card-section>
         <q-card-section class="row justify-end">
-          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
+          <q-btn color="positive" outline @click="back(task._id)"
+            >Отправить</q-btn
+          >
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -339,6 +341,7 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
+// import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -413,8 +416,11 @@ export default defineComponent({
         console.log("ERROR");
       }
     },
-    back() {
+    async back() {
       this.$router.push(`/`);
+      // await Browser.close({
+      //   url: `http://192.168.1.172:9500/#/task/:${id}`,
+      // });
     },
     async startPause() {
       console.log("start pause", this.$route.params.id.substring(1));

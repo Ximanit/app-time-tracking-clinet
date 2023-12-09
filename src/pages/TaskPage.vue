@@ -191,7 +191,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="mobile-only capacitor-only">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -339,6 +339,7 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
+import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -414,6 +415,7 @@ export default defineComponent({
       }
     },
     back() {
+      window.close();
       this.$router.push(`/`);
     },
     async startPause() {

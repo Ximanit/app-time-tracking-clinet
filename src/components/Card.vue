@@ -79,7 +79,7 @@
     </q-dialog>
   </div>
 
-  <div class="capacitor-only row justify-center">
+  <div class="mobile-only capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-// import { Browser } from "@capacitor/browser";
+import { Browser } from "@capacitor/browser";
 
 export default {
   props: {
@@ -165,11 +165,11 @@ export default {
     };
   },
   methods: {
-    // async micro(id) {
-    //   await Browser.open({
-    //     url: `http://192.168.1.172:9500/#/task/:${id}`
-    //   });
-    // },
+    async micro(id) {
+      await Browser.open({
+        url: `http://192.168.1.172:9500/#/task/:${id}`,
+      });
+    },
     showFullTask() {
       this.fullTask = true;
     },

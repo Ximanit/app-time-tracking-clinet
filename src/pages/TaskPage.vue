@@ -191,7 +191,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="mobile-only native-mobile-hide">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -335,7 +335,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="capacitor-only">
+  <q-page class="native-mobile-only">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"

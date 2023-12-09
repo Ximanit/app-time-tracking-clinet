@@ -79,7 +79,71 @@
     </q-dialog>
   </div>
 
-  <div class="mobile-only capacitor-only row justify-center">
+  <div class="mobile-only row justify-center">
+    <q-card class="q-pa-md card-mobile q-mb-sm">
+      <div class="row inline justify-between q-mb-sm">
+        <q-card-section
+          class="text-bold q-pa-none"
+          style="font-size: 13px; width: 260px"
+        >
+          <!-- Name -->
+          {{ task[id].task_name }}
+          <div class="q-mt-sm">
+            <q-chip
+              style="height: 20px; font-size: 8px"
+              text-color="dark"
+              class="date text-weight-medium q-ma-none q-mr-sm"
+            >
+              <!-- date -->
+              {{ formatDate(task[id].data_start) }}
+              - {{ formatDate(task[id].data_end) }}
+            </q-chip>
+            <q-chip
+              style="height: 20px; font-size: 8px"
+              text-color="negative"
+              class="urgency q-ma-none"
+            >
+              <!-- urgency -->
+              {{ task[id].urgency }}
+            </q-chip>
+          </div>
+        </q-card-section>
+
+        <q-btn
+          color="grey"
+          round
+          flat
+          dense
+          :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+          @click="expanded = !expanded"
+        />
+      </div>
+
+      <q-slide-transition>
+        <div v-show="expanded">
+          <q-card-section class="text-subtitle2 no-padding">
+            {{ task[id].description }}
+            <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+            voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
+            sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
+            Nesciunt fugiat animi perspiciatis. -->
+            <div class="q-mt-sm">
+              <q-btn
+                class="q-pa-none btn"
+                outline
+                color="positive"
+                @click="micro(task[id]._id)"
+              >
+                Принять
+              </q-btn>
+            </div>
+          </q-card-section>
+        </div>
+      </q-slide-transition>
+    </q-card>
+  </div>
+
+  <div class="capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section

@@ -1,5 +1,6 @@
 <template>
   <q-page class="desktop-only">
+    <Header />
     <!-- TODO переделать -->
     <div class="q-pt-md desktop-only" style="margin-left: 314px">
       <div class="row q-gutter-sm">
@@ -12,6 +13,7 @@
   </q-page>
 
   <q-page class="mobile-only native-mobile-hide">
+    <Header />
     <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
       <!-- Передаем данные из хранилища в компонент карточки -->
       <Card
@@ -24,6 +26,7 @@
   </q-page>
 
   <q-page class="capacitor-only">
+    <Header />
     <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
       <!-- Передаем данные из хранилища в компонент карточки -->
       <Card
@@ -39,12 +42,14 @@
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
 import Card from "src/components/Card.vue";
+import Header from "src/components/Header.vue";
 import { api } from "../boot/axios";
 
 export default defineComponent({
   name: "IndexPage",
   components: {
     Card,
+    Header,
   },
   mounted() {
     this.getTask();

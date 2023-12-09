@@ -1,6 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="desktop-only">
-    <q-header elevated color="primary">
+    //TODO потом удалить
+    <!-- <q-header elevated color="primary">
       <q-toolbar class="q-pa-none">
         <div class="search q-py-md">
           <q-select
@@ -43,15 +44,14 @@
           </q-btn>
         </div>
       </q-toolbar>
-    </q-header>
-
+    </q-header> -->
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
 
   <q-layout view="lHh Lpr lFf" class="mobile-only">
-    <q-header>
+    <!-- <q-header>
       <q-toolbar class="no-padding tlbr">
         <q-select
           :dense="true"
@@ -77,15 +77,15 @@
           />
         </q-btn>
       </q-toolbar>
-    </q-header>
-
+    </q-header> -->
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script>
+//TODO потом удалить
+<!-- <script>
 import { defineComponent, ref } from "vue";
 import { api } from "../boot/axios";
 
@@ -115,9 +115,10 @@ export default defineComponent({
     },
   },
 });
-</script>
+</script> -->
 
-<style scoped>
+//TODO потом удалить
+<!-- <style scoped>
 .help-btn {
   width: 40px;
   height: 40px;
@@ -170,4 +171,4 @@ export default defineComponent({
 .tlbr {
   background-color: #fefff4;
 }
-</style>
+</style> -->

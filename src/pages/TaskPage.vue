@@ -1,5 +1,6 @@
 <template>
   <q-page class="desktop-only">
+    <Header />
     <div class="row justify-center">
       <q-card
         class="work-task q-ma-lg"
@@ -192,6 +193,7 @@
   </q-page>
 
   <q-page class="mobile-only native-mobile-hide">
+    <Header />
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -336,6 +338,7 @@
   </q-page>
 
   <q-page class="capacitor-only">
+    <Header />
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -483,6 +486,7 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
+import Header from "../components/Header.vue";
 
 export default defineComponent({
   name: "IndexPage",
@@ -512,6 +516,9 @@ export default defineComponent({
       audioChunks: [],
       finalTranscript: "",
     };
+  },
+  components: {
+    Header,
   },
   mounted() {
     this.getTask();

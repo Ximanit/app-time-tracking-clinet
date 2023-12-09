@@ -143,7 +143,7 @@
     </q-card>
   </div>
 
-  <div class="native-mobile-only row justify-center">
+  <div class="capacitor-only row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
@@ -231,6 +231,7 @@ export default {
   methods: {
     async micro(id) {
       await Browser.open({
+        //TODO заменить на нормальный адрес
         url: `http://192.168.1.172:9500/#/task/:${id}`,
       });
     },

@@ -23,7 +23,7 @@
     </div>
   </q-page>
 
-  <q-page class="native-mobile-only">
+  <q-page class="capacitor-only">
     <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
       <!-- Передаем данные из хранилища в компонент карточки -->
       <Card

@@ -294,7 +294,7 @@
           </div>
         </q-card-section>
         <q-card-section class="row justify-end">
-          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
+          <q-btn color="positive" outline @click="finish()">Отправить</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -335,7 +335,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="native-mobile-only">
+  <q-page class="capacitor-only">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -438,7 +438,7 @@
           </div>
         </q-card-section>
         <q-card-section class="row justify-end">
-          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
+          <q-btn color="positive" outline @click="finish()">Отправить</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -483,7 +483,6 @@
 <script>
 import { defineComponent } from "vue";
 import { api } from "../boot/axios";
-import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -511,6 +510,7 @@ export default defineComponent({
       isRecording: false,
       mediaRecorder: null,
       audioChunks: [],
+      finalTranscript: "",
     };
   },
   mounted() {
@@ -558,7 +558,27 @@ export default defineComponent({
         console.log("ERROR");
       }
     },
-    back() {
+    async finish() {
+      if (this.finalTranscript == "") {
+        this.$q.notify({
+          type: "negative",
+          message: "Для начала запишите комментарий",
+        });
+        return;
+      }
+      try {
+        const res = await api.put(
+          `/task/${this.$route.params.id.substring(1)}`,
+          {
+            end: new Date().toLocaleDateString(),
+            comment: this.finalTranscript,
+            complited: true,
+          }
+        );
+        console.log(res.data);
+      } catch (error) {
+        console.log("ERROR");
+      }
       window.close();
       this.$router.push(`/`);
     },

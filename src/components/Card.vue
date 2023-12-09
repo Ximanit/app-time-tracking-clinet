@@ -132,7 +132,7 @@
                 class="q-pa-none btn"
                 outline
                 color="positive"
-                @click="micro(task[id]._id)"
+                @click="taskStart(task[id]._id)"
               >
                 Принять
               </q-btn>
@@ -233,6 +233,10 @@ export default {
       await Browser.open({
         url: `http://192.168.1.172:9500/#/task/:${id}`,
       });
+    },
+    taskStart(id) {
+      console.log(id);
+      this.$router.push(`/task/:${id}`);
     },
     showFullTask() {
       this.fullTask = true;

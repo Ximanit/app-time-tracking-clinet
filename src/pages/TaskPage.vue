@@ -192,7 +192,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="mobile-only native-mobile-hide">
     <Header />
     <div class="row justify-center">
       <q-btn
@@ -337,7 +337,7 @@
     </q-dialog>
   </q-page>
 
-  <!-- <q-page class="capacitor-only">
+  <q-page class="capacitor-only">
     <Header />
     <div class="row justify-center">
       <q-btn
@@ -480,7 +480,7 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-  </q-page> -->
+  </q-page>
 </template>
 
 <script>

@@ -191,7 +191,151 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only capacitor-only">
+  <q-page class="mobile-only">
+    <div class="row justify-center">
+      <q-btn
+        class="q-mb-md"
+        text-color="white"
+        style="
+          width: 328px;
+          height: 52px;
+          background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
+        "
+        @click="fastTask = !fastTask"
+        >Оформить быструю задачу</q-btn
+      >
+    </div>
+
+    <div class="row justify-center">
+      <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
+        <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
+          {{ task.task_name }}
+        </q-card-section>
+        <q-card-section class="q-pt-none q-px-none">
+          <q-chip
+            style="height: 28px; font-size: 10px"
+            text-color="dark"
+            class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
+          >
+            11.11.2023 - 14.11.2023
+          </q-chip>
+          <q-chip
+            style="height: 28px; font-size: 10px"
+            text-color="negative"
+            class="urgency q-ma-none q-px-sm q-py-xs"
+            >{{ task.urgency }}</q-chip
+          >
+        </q-card-section>
+        <q-card-section
+          class="q-pa-none q-mb-xl"
+          style="font-size: 13px; line-height: 16px"
+        >
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+          voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
+          ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
+          fugiat animi perspiciatis.
+        </q-card-section>
+        <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
+          {{ elapsedTime }}
+        </q-card-section>
+        <q-card-section class="row justify-between q-pa-none">
+          <q-btn
+            class="q-py-md q-px-lg text-h5"
+            style="width: 117px"
+            color="warning"
+            text-color="dark"
+            outline
+            @click="startPause()"
+          >
+            Пауза
+          </q-btn>
+          <q-btn
+            class="q-pa-none text-h5 q-py-md"
+            style="width: 163px; border-radius: 4px"
+            color="positive"
+            outline
+            @click="finishTask = !finishTask"
+          >
+            Завершить
+          </q-btn>
+        </q-card-section>
+        <div v-if="task.isPause" class="paused-overlay">
+          <q-btn
+            class="resume-button q-ma-md text-h5"
+            @click.native="endPause()"
+          >
+            Продолжить
+          </q-btn>
+        </div>
+      </q-card>
+    </div>
+    <q-dialog v-model="finishTask">
+      <q-card style="width: 328px; height: 328px">
+        <q-card-section style="font-size: 17px">
+          Комментарий по работе
+
+          <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
+            <template v-slot:append>
+              <q-btn
+                @click="startButton()"
+                round
+                dense
+                flat
+                :icon="isRecording ? 'mic_off' : 'mic'"
+              />
+            </template>
+          </q-input>
+
+          <div style="font-size: 17px" class="q-mb-lg">
+            Потраченное время на работу
+          </div>
+          <div class="row justify-center" style="font-size: 36px">
+            {{ elapsedTime }}
+          </div>
+        </q-card-section>
+        <q-card-section class="row justify-end">
+          <q-btn color="positive" outline @click="back()">Отправить</q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="fastTask"
+      ><q-card style="width: 328px; min-height: 400px">
+        <q-card-section style="font-size: 17px" class="text-bold">
+          Оформить быструю задачу
+        </q-card-section>
+        <q-card-section style="margin-bottom: 110px">
+          <div>Введите название быстрой задачи</div>
+          <q-input
+            v-model="fastTaskTitle"
+            class="q-mb-md"
+            :dense="true"
+            outlined
+            autogrow
+          >
+          </q-input>
+
+          <div>Выберите проект</div>
+          <q-select
+            v-model="model"
+            outlined
+            :options="options"
+            label="Выбор проекта"
+            :dense="true"
+          />
+
+          <div>Комментарий</div>
+          <q-input v-model="fastTaskDes" outlined :dense="true" autogrow>
+          </q-input>
+        </q-card-section>
+        <q-card-section class="row justify-between">
+          <q-btn color="8F8F8F" outline>Отмена</q-btn>
+          <q-btn color="positive" outline>Создать</q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </q-page>
+
+  <q-page class="capacitor-only">
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"

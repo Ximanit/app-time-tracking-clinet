@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="desktop-only">
+  <q-layout view="lHh Lpr lFf">
     //TODO потом удалить
     <!-- <q-header elevated color="primary">
       <q-toolbar class="q-pa-none">
@@ -50,8 +50,8 @@
     </q-page-container>
   </q-layout>
 
-  <q-layout view="lHh Lpr lFf" class="mobile-only">
-    <!-- <q-header>
+  <!-- <q-layout view="lHh Lpr lFf" class="mobile-only">
+    <q-header>
       <q-toolbar class="no-padding tlbr">
         <q-select
           :dense="true"
@@ -77,11 +77,11 @@
           />
         </q-btn>
       </q-toolbar>
-    </q-header> -->
+    </q-header>
     <q-page-container>
       <router-view />
     </q-page-container>
-  </q-layout>
+  </q-layout> -->
 </template>
 
 //TODO потом удалить

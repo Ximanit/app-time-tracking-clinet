@@ -75,6 +75,7 @@
 
 <script>
 import { ref } from "vue";
+import VueCookie from "vue-cookie";
 
 export default {
   name: "Header",
@@ -91,6 +92,8 @@ export default {
   },
   methods: {
     logout() {
+      VueCookie.delete("token");
+      VueCookie.delete("username");
       this.$router.replace("/auth");
     },
     async updateTask() {

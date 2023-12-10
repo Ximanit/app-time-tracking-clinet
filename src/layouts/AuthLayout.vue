@@ -86,6 +86,8 @@
 <script>
 import { api } from "../boot/axios.js";
 import { ref } from "vue";
+import VueCookies from "vue-cookies";
+
 export default {
   data() {
     return {
@@ -124,6 +126,18 @@ export default {
         return;
       }
       try {
+        const response = await api.post("auth/login", {
+          username: this.username,
+          password: this.password,
+        });
+        VueCookies.set("token", response.data.token, Infinity);
+        VueCookies.set("username", this.username, Infinity);
+        VueCookies.set("id", response.data.id, Infinity);
+        console.log(response.data);
+        this.$q.notify({
+          type: "positive",
+          message: "Пользователь успешно авторизован.",
+        });
         this.$router.replace("/");
       } catch (error) {
         this.onError(error);

@@ -1,13 +1,25 @@
 <template>
   <q-page class="desktop-only">
     <Header />
+
     <!-- TODO переделать -->
     <div class="q-pt-xl desktop-only" style="margin-left: 314px">
       <div class="row q-gutter-sm">
-        <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
-          <Card :task="tasks" :id="id" />
+        <div v-if="!token" class="fixed-center text-center text-h3">
+          Чтобы получить задачи, авторизуйтесь
+        </div>
+        <div
+          v-else-if="token"
+          v-for="(task, id) in tasks"
+          :key="task.id"
+          transition="scale"
+        >
+          <Card v-if="!task.complited" :task="tasks" :id="id" />
         </div>
       </div>
+    </div>
+    <div v-if="loading" class="text-center">
+      <q-spinner-ball color="primary" size="8em" />
     </div>
   </q-page>
 
@@ -60,11 +72,15 @@ export default defineComponent({
     Card,
     Header,
   },
+  data() {
+    return {
+      loading: false,
+    };
+  },
   mounted() {
     this.getTask();
   },
   setup() {
-    // const taskStore = useTask();
     const tasks = ref(null);
     const token = VueCookie.get("token");
     return {
@@ -86,6 +102,7 @@ export default defineComponent({
         this.loading = false;
       } catch (error) {
         console.log("ERROR");
+        this.loading = false;
       }
     },
   },

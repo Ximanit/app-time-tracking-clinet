@@ -2,7 +2,7 @@
   <q-page class="desktop-only">
     <Header />
     <!-- TODO переделать -->
-    <div class="q-pt-md desktop-only" style="margin-left: 314px">
+    <div class="q-pt-xl desktop-only" style="margin-left: 314px">
       <div class="row q-gutter-sm">
         <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
           <Card :task="tasks" :id="id" />

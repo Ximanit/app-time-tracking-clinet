@@ -29,6 +29,9 @@
         :id="id"
       />
     </div>
+    <div v-if="loading" class="text-center">
+      <q-spinner-ball color="primary" size="8em" />
+    </div>
   </q-page>
 
   <!-- <q-page class="capacitor-only">
@@ -72,6 +75,7 @@ export default defineComponent({
   methods: {
     async getTask() {
       const id = VueCookie.get("id");
+      this.loading = true;
       try {
         const res = await api.get(`/task/user/${id}`, {
           headers: {
@@ -79,6 +83,7 @@ export default defineComponent({
           },
         });
         this.tasks = res.data;
+        this.loading = false;
       } catch (error) {
         console.log("ERROR");
       }

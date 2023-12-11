@@ -256,7 +256,7 @@
             style="width: 163px; border-radius: 4px"
             color="positive"
             outline
-            @click="finishTask = !finishTask"
+            @click="(finishTask = !finishTask), stopTimer()"
           >
             Завершить
           </q-btn>
@@ -297,6 +297,11 @@
         </q-card-section>
         <q-card-section class="row justify-end">
           <q-btn color="positive" outline @click="finish()">Отправить</q-btn>
+        </q-card-section>
+        <q-card-section v-if="loading">
+          <div class="fixed-center">
+            <q-spinner-gears color="primary" size="7em" />
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -484,9 +489,10 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { api } from "../boot/axios";
 import Header from "../components/Header.vue";
+import VueCookie from "vue-cookie";
 
 export default defineComponent({
   name: "IndexPage",
@@ -502,10 +508,10 @@ export default defineComponent({
         "Главная страница",
       ],
       task: [],
-      isPause: false,
       elapsedTime: "00:00:00",
       // Добавьте переменные для отслеживания времени
       startTime: null,
+      isPause: false,
       timerInterval: null,
       savedElapsedTime: undefined,
       recognition: null,
@@ -515,6 +521,7 @@ export default defineComponent({
       mediaRecorder: null,
       audioChunks: [],
       finalTranscript: "",
+      loading: false,
     };
   },
   components: {
@@ -525,34 +532,6 @@ export default defineComponent({
     this.startTimer();
   },
   methods: {
-    startTimer() {
-      // Запомните текущее время как начальное время
-      this.startTime = new Date();
-
-      // Установите интервал для обновления elapsedTime каждую секунду
-      this.timerInterval = setInterval(() => {
-        this.updateElapsedTime();
-      }, 1000);
-    },
-    updateElapsedTime() {
-      // Вычислите разницу между текущим временем и начальным временем
-      const now = new Date();
-      const diff = Math.floor((now - this.startTime) / 1000);
-
-      // Преобразуйте разницу в формат HH:mm:ss и обновите elapsedTime
-      const hours = Math.floor(diff / 3600)
-        .toString()
-        .padStart(2, "0");
-      const minutes = Math.floor((diff % 3600) / 60)
-        .toString()
-        .padStart(2, "0");
-      const seconds = (diff % 60).toString().padStart(2, "0");
-      this.elapsedTime = `${hours}:${minutes}:${seconds}`;
-    },
-    stopTimer() {
-      // Очистите интервал при остановке таймера
-      clearInterval(this.timerInterval);
-    },
     async getTask() {
       try {
         const res = await api.get(
@@ -589,25 +568,62 @@ export default defineComponent({
       window.close();
       this.$router.push(`/`);
     },
+    startTimer() {
+      // Запомните текущее время как начальное время
+      this.startTime = new Date();
+
+      // Установите интервал для обновления elapsedTime каждую секунду
+      this.timerInterval = setInterval(() => {
+        this.updateElapsedTime();
+      }, 1000);
+    },
+    updateElapsedTime() {
+      if (!this.isPause) {
+        // Вычислите разницу между текущим временем и начальным временем
+        const now = new Date();
+        const diff = Math.floor((now - this.startTime) / 1000);
+
+        // Преобразуйте разницу в формат HH:mm:ss и обновите elapsedTime
+        const hours = Math.floor(diff / 3600)
+          .toString()
+          .padStart(2, "0");
+        const minutes = Math.floor((diff % 3600) / 60)
+          .toString()
+          .padStart(2, "0");
+        const seconds = (diff % 60).toString().padStart(2, "0");
+        this.elapsedTime = `${hours}:${minutes}:${seconds}`;
+      }
+    },
+    stopTimer() {
+      // Очистите интервал при остановке таймера
+      clearInterval(this.timerInterval);
+    },
     async startPause() {
       console.log("start pause", this.$route.params.id.substring(1));
       try {
         this.stopTimer();
         this.isPause = false;
         console.log(this.isPause);
-        await Promise.resolve();
 
         // Сохраните текущее значение elapsedTime при постановке на паузу
         this.savedElapsedTime = this.elapsedTime;
+        VueCookie.set("pause", this.elapsedTime);
 
-        await api.patch(`/task/onpause/${this.$route.params.id.substring(1)}`);
+        await api.patch(
+          `/task/onpause/${this.$route.params.id.substring(1)}`,
+          null,
+          {
+            headers: {
+              authorization: VueCookie.get("token"),
+            },
+          }
+        );
         this.getTask();
       } catch (error) {
-        console.log("ERROR");
+        console.error("Error during startPause:", error);
       }
     },
     async endPause() {
-      console.log("Go");
       try {
         // Если есть сохраненное значение, используйте его
         if (this.savedElapsedTime !== undefined) {
@@ -621,12 +637,23 @@ export default defineComponent({
         // Запустите таймер
         this.startTimer();
 
-        await Promise.resolve();
-        await api.patch(`/task/offpause/${this.$route.params.id.substring(1)}`);
+        await api.patch(
+          `/task/offpause/${this.$route.params.id.substring(1)}`,
+          null,
+          {
+            headers: {
+              authorization: VueCookie.get("token"),
+            },
+          }
+        );
         this.getTask();
+        console.log(VueCookie.get("pause"));
+        this.elapsedTime = VueCookie.get("pause");
+        console.log(this.elapsedTime);
       } catch (error) {
-        console.log("ERROR");
+        console.error("Error during endPause:", error);
       }
+      this.elapsedTime = VueCookie.get("pause");
     },
     startButton() {
       const serverURL =
@@ -646,7 +673,7 @@ export default defineComponent({
               const audioBlob = new Blob(this.audioChunks);
               const fd = new FormData();
               fd.append("audio", audioBlob);
-
+              this.loading = true;
               // Отправка на сервер
               fetch(serverURL, {
                 method: "POST",
@@ -656,6 +683,7 @@ export default defineComponent({
                 .then((data) => {
                   this.finalTranscript = data.text;
                   console.log(data.text);
+                  this.loading = false;
                 })
                 .catch((error) => {
                   console.error("Error during server request:", error);

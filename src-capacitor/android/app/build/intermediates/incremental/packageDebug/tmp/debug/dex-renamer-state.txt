@@ -1,4 +1,4 @@
-#Sat Dec 09 22:51:20 VLAT 2023
+#Tue Dec 12 00:08:44 VLAT 2023
 base.0=C\:\\Users\\Maxim\\Desktop\\programming\\app-time-tracking-clinet\\src-capacitor\\android\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\Maxim\\Desktop\\programming\\app-time-tracking-clinet\\src-capacitor\\android\\app\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\11\\classes.dex
 base.2=C\:\\Users\\Maxim\\Desktop\\programming\\app-time-tracking-clinet\\src-capacitor\\android\\app\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\2\\classes.dex

@@ -232,7 +232,7 @@ export default {
     async micro(id) {
       await Browser.open({
         //TODO заменить на нормальный адрес
-        url: `http://192.168.1.172:9500/#/task/:${id}`,
+        url: `https://spa-five-sigma.vercel.app/#/task/:${id}`,
       });
     },
     taskStart(id) {

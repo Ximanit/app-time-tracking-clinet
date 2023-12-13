@@ -39,24 +39,13 @@
         style="width: 328px; height: 92px"
         :task="tasks"
         :id="id"
+        :isPause="task.isPause"
       />
     </div>
     <div v-if="loading" class="text-center">
       <q-spinner-ball color="primary" size="8em" />
     </div>
   </q-page>
-
-  <!-- <q-page class="capacitor-only">
-    <Header />
-    <div v-for="(task, id) in tasks" :key="task.id" transition="scale">
-      <Card
-        v-if="!task.complited"
-        style="width: 328px; height: 92px"
-        :task="tasks"
-        :id="id"
-      />
-    </div>
-  </q-page> -->
 </template>
 
 <script>

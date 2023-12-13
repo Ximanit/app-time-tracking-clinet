@@ -81,7 +81,12 @@
 
   <div class="mobile-only native-mobile-hide row justify-center">
     <q-card class="q-pa-md card-mobile q-mb-sm">
-      <div class="row inline justify-between q-mb-sm">
+      <div v-if="task[id].isPause">
+        <q-card-section class="card-paused row justify-center">
+          <q-btn @click="taskStart(task[id]._id)" flat size="25px"> ❚❚ </q-btn>
+        </q-card-section>
+      </div>
+      <div v-else class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
           style="font-size: 13px; width: 260px"
@@ -221,6 +226,9 @@ export default {
       type: Number,
       required: true,
     },
+    isPause: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -261,12 +269,15 @@ export default {
 
 <style scoped>
 .card-paused {
-  background: rgba(0, 0, 0, 0.5); /* Затемнение экрана при паузе */
+  /* background: rgba(0, 0, 0, 0.5); */
+  padding: 0px;
+  width: 295px;
+  height: 57px; /* Затемнение экрана при паузе */
 }
 
 .pause-icon {
   font-size: 24px;
-  color: white;
+  color: rgb(0, 0, 0);
   position: absolute;
   top: 50%;
   left: 50%;

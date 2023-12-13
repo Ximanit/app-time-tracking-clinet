@@ -46,19 +46,34 @@
 
   <q-header class="mobile-only">
     <q-toolbar class="no-padding tlbr">
+      <!-- <div v-if="this.route === '/'"> -->
       <q-select
         :dense="true"
         outlined
         v-model="model"
         :options="options"
+        v-if="this.route === '/'"
         label="Выбор проекта"
         bg-color="white"
         class="q-ml-md q-mt-md q-mb-md q-mr-xl"
         style="width: 142px"
       />
-      <q-btn class="btn-refresh q-pa-sm q-mr-md">
+      <q-btn v-if="this.route === '/'" class="btn-refresh q-pa-sm q-mr-md">
         <q-icon color="dark" name="autorenew" />
       </q-btn>
+      <!-- </div> -->
+      <div v-else>
+        <q-btn
+          to="/"
+          size="20px"
+          flat
+          round
+          color="dark"
+          icon="navigate_before"
+        ></q-btn>
+      </div>
+      <q-space />
+
       <q-btn class="btn-q q-pa-sm q-mr-md">
         <div style="color: black">?</div>
       </q-btn>
@@ -79,6 +94,14 @@ import VueCookie from "vue-cookie";
 
 export default {
   name: "Header",
+  mounted() {
+    this.getRoute();
+  },
+  data() {
+    return {
+      route: "",
+    };
+  },
   setup() {
     return {
       model: ref(null),
@@ -102,6 +125,10 @@ export default {
       } catch (error) {
         console.log("ERROR");
       }
+    },
+    getRoute() {
+      this.route = this.$route.fullPath;
+      console.log(this.$route);
     },
   },
 };

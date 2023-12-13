@@ -203,7 +203,7 @@
           height: 52px;
           background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
         "
-        @click="fastTask = !fastTask"
+        @click="createFastTask()"
         >Оформить быструю задачу</q-btn
       >
     </div>
@@ -238,7 +238,7 @@
           fugiat animi perspiciatis.
         </q-card-section>
         <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
-          {{ elapsedTime }}
+          {{ formattedTime }}
         </q-card-section>
         <q-card-section class="row justify-between q-pa-none">
           <q-btn
@@ -341,151 +341,6 @@
       </q-card>
     </q-dialog>
   </q-page>
-
-  <!-- <q-page class="capacitor-only">
-    <Header />
-    <div class="row justify-center">
-      <q-btn
-        class="q-mb-md"
-        text-color="white"
-        style="
-          width: 328px;
-          height: 52px;
-          background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
-        "
-        @click="fastTask = !fastTask"
-        >Оформить быструю задачу</q-btn
-      >
-    </div>
-
-    <div class="row justify-center">
-      <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
-        <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
-          {{ task.task_name }}
-        </q-card-section>
-        <q-card-section class="q-pt-none q-px-none">
-          <q-chip
-            style="height: 28px; font-size: 10px"
-            text-color="dark"
-            class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
-          >
-            11.11.2023 - 14.11.2023
-          </q-chip>
-          <q-chip
-            style="height: 28px; font-size: 10px"
-            text-color="negative"
-            class="urgency q-ma-none q-px-sm q-py-xs"
-            >{{ task.urgency }}</q-chip
-          >
-        </q-card-section>
-        <q-card-section
-          class="q-pa-none q-mb-xl"
-          style="font-size: 13px; line-height: 16px"
-        >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
-          voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
-          ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
-          fugiat animi perspiciatis.
-        </q-card-section>
-        <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
-          {{ elapsedTime }}
-        </q-card-section>
-        <q-card-section class="row justify-between q-pa-none">
-          <q-btn
-            class="q-py-md q-px-lg text-h5"
-            style="width: 117px"
-            color="warning"
-            text-color="dark"
-            outline
-            @click="startPause()"
-          >
-            Пауза
-          </q-btn>
-          <q-btn
-            class="q-pa-none text-h5 q-py-md"
-            style="width: 163px; border-radius: 4px"
-            color="positive"
-            outline
-            @click="finishTask = !finishTask"
-          >
-            Завершить
-          </q-btn>
-        </q-card-section>
-        <div v-if="task.isPause" class="paused-overlay">
-          <q-btn
-            class="resume-button q-ma-md text-h5"
-            @click.native="endPause()"
-          >
-            Продолжить
-          </q-btn>
-        </div>
-      </q-card>
-    </div>
-    <q-dialog v-model="finishTask">
-      <q-card style="width: 328px; height: 328px">
-        <q-card-section style="font-size: 17px">
-          Комментарий по работе
-
-          <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
-            <template v-slot:append>
-              <q-btn
-                @click="startButton()"
-                round
-                dense
-                flat
-                :icon="isRecording ? 'mic_off' : 'mic'"
-              />
-            </template>
-          </q-input>
-
-          <div style="font-size: 17px" class="q-mb-lg">
-            Потраченное время на работу
-          </div>
-          <div class="row justify-center" style="font-size: 36px">
-            {{ elapsedTime }}
-          </div>
-        </q-card-section>
-        <q-card-section class="row justify-end">
-          <q-btn color="positive" outline @click="finish()">Отправить</q-btn>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="fastTask"
-      ><q-card style="width: 328px; min-height: 400px">
-        <q-card-section style="font-size: 17px" class="text-bold">
-          Оформить быструю задачу
-        </q-card-section>
-        <q-card-section style="margin-bottom: 110px">
-          <div>Введите название быстрой задачи</div>
-          <q-input
-            v-model="fastTaskTitle"
-            class="q-mb-md"
-            :dense="true"
-            outlined
-            autogrow
-          >
-          </q-input>
-
-          <div>Выберите проект</div>
-          <q-select
-            v-model="model"
-            outlined
-            :options="options"
-            label="Выбор проекта"
-            :dense="true"
-          />
-
-          <div>Комментарий</div>
-          <q-input v-model="fastTaskDes" outlined :dense="true" autogrow>
-          </q-input>
-        </q-card-section>
-        <q-card-section class="row justify-between">
-          <q-btn color="8F8F8F" outline>Отмена</q-btn>
-          <q-btn color="positive" outline>Создать</q-btn>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-  </q-page> -->
 </template>
 
 <script>
@@ -508,12 +363,7 @@ export default defineComponent({
         "Главная страница",
       ],
       task: [],
-      elapsedTime: "00:00:00",
-      // Добавьте переменные для отслеживания времени
-      startTime: null,
       isPause: false,
-      timerInterval: null,
-      savedElapsedTime: undefined,
       recognition: null,
       fastTaskTitle: "",
       fastTaskDes: "",
@@ -522,6 +372,13 @@ export default defineComponent({
       audioChunks: [],
       finalTranscript: "",
       loading: false,
+
+      isTimerRunning: false,
+      isPause: false,
+      elapsedTime: 0,
+      savedElapsedTime: null,
+      formattedTime: "00:00:00",
+      timerInterval: null,
     };
   },
   components: {
@@ -569,48 +426,55 @@ export default defineComponent({
       this.$router.push(`/`);
     },
     startTimer() {
-      // Запомните текущее время как начальное время
-      this.startTime = new Date();
-
-      // Установите интервал для обновления elapsedTime каждую секунду
+      this.isTimerRunning = true;
       this.timerInterval = setInterval(() => {
         this.updateElapsedTime();
       }, 1000);
     },
-    updateElapsedTime() {
-      if (!this.isPause) {
-        // Вычислите разницу между текущим временем и начальным временем
-        const now = new Date();
-        const diff = Math.floor((now - this.startTime) / 1000);
-
-        // Преобразуйте разницу в формат HH:mm:ss и обновите elapsedTime
-        const hours = Math.floor(diff / 3600)
-          .toString()
-          .padStart(2, "0");
-        const minutes = Math.floor((diff % 3600) / 60)
-          .toString()
-          .padStart(2, "0");
-        const seconds = (diff % 60).toString().padStart(2, "0");
-        this.elapsedTime = `${hours}:${minutes}:${seconds}`;
-      }
-    },
     stopTimer() {
-      // Очистите интервал при остановке таймера
+      this.isTimerRunning = false;
       clearInterval(this.timerInterval);
     },
+    resetTimer() {
+      this.elapsedTime = 0;
+      this.updateFormattedTime(); // Обновление отформатированного времени после сброса
+    },
+    updateElapsedTime() {
+      if (!this.isPause) {
+        this.elapsedTime++;
+        this.updateFormattedTime(); // Обновление отформатированного времени при изменении времени
+      }
+    },
+    updateFormattedTime() {
+      const hours = Math.floor(this.elapsedTime / 3600);
+      const minutes = Math.floor((this.elapsedTime % 3600) / 60);
+      const seconds = this.elapsedTime % 60;
+
+      this.formattedTime = `${String(hours).padStart(2, "0")}:${String(
+        minutes
+      ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    },
+    formatTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+
+      const formattedHours = String(hours).padStart(2, "0");
+      const formattedMinutes = String(minutes).padStart(2, "0");
+      const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+      return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    },
     async startPause() {
-      console.log("start pause", this.$route.params.id.substring(1));
       try {
         this.stopTimer();
-        this.isPause = false;
-        console.log(this.isPause);
-
-        // Сохраните текущее значение elapsedTime при постановке на паузу
+        this.isPause = true;
         this.savedElapsedTime = this.elapsedTime;
-        VueCookie.set("pause", this.elapsedTime);
 
         await api.patch(
-          `/task/onpause/${this.$route.params.id.substring(1)}`,
+          `/task/onpause/${this.$route.params.id.substring(1)}?save_time=${
+            this.elapsedTime
+          }`,
           null,
           {
             headers: {
@@ -623,18 +487,17 @@ export default defineComponent({
         console.error("Error during startPause:", error);
       }
     },
+
     async endPause() {
       try {
-        // Если есть сохраненное значение, используйте его
-        if (this.savedElapsedTime !== undefined) {
-          // Обновите elapsedTime, чтобы таймер начал отсчет с сохраненного значения
-          this.elapsedTime = this.savedElapsedTime;
-          this.savedElapsedTime = undefined; // Сброс сохраненного значения
-        }
-        this.isPause = true;
-        console.log(this.isPause);
+        this.isPause = false;
 
-        // Запустите таймер
+        if (this.savedElapsedTime !== null) {
+          this.elapsedTime = this.savedElapsedTime;
+          this.savedElapsedTime = null;
+        }
+
+        this.stopTimer();
         this.startTimer();
 
         await api.patch(
@@ -647,61 +510,41 @@ export default defineComponent({
           }
         );
         this.getTask();
-        console.log(VueCookie.get("pause"));
-        this.elapsedTime = VueCookie.get("pause");
-        console.log(this.elapsedTime);
       } catch (error) {
         console.error("Error during endPause:", error);
       }
-      this.elapsedTime = VueCookie.get("pause");
     },
-    startButton() {
-      const serverURL =
-        "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
-
-      if (!this.isRecording) {
-        navigator.mediaDevices
-          .getUserMedia({ audio: true })
-          .then((stream) => {
-            this.mediaRecorder = new MediaRecorder(stream);
-
-            this.mediaRecorder.addEventListener("dataavailable", (event) => {
-              this.audioChunks.push(event.data);
-            });
-
-            this.mediaRecorder.addEventListener("stop", () => {
-              const audioBlob = new Blob(this.audioChunks);
-              const fd = new FormData();
-              fd.append("audio", audioBlob);
-              this.loading = true;
-              // Отправка на сервер
-              fetch(serverURL, {
-                method: "POST",
-                body: fd,
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  this.finalTranscript = data.text;
-                  console.log(data.text);
-                  this.loading = false;
-                })
-                .catch((error) => {
-                  console.error("Error during server request:", error);
-                });
-
-              this.audioChunks = [];
-            });
-
-            this.mediaRecorder.start();
-            this.isRecording = true;
-          })
-          .catch((error) => {
-            console.error("Error accessing microphone:", error);
-          });
-      } else {
-        this.mediaRecorder.stop();
-        this.isRecording = false;
+    async createFastTask() {
+      const today = new Date().toLocaleDateString();
+      const tomorrow = new Date().toLocaleDateString(24 * 3600 * 1000);
+      try {
+        const res = await api.post(
+          "/task",
+          {
+            user: VueCookie.get("id"),
+            task_name: "Быстрая задача",
+            description: " ",
+            data_start: today,
+            data_end: tomorrow,
+            pause: [],
+          },
+          {
+            headers: {
+              authorization: VueCookie.get("token"),
+            },
+          }
+        );
+        console.log(res.data._id);
+        this.startPause();
+        this.$router.push(`/task/:${res.data._id}`);
+      } catch (error) {
+        console.log("Error");
       }
+    },
+  },
+  watch: {
+    elapsedTime() {
+      this.updateFormattedTime();
     },
   },
 });

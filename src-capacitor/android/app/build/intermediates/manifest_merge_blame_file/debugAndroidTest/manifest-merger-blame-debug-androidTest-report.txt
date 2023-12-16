@@ -3,24 +3,24 @@
 3    package="org.capacitor.quasar.app.test" >
 4
 5    <uses-sdk
-5-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:5:5-74
+5-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:5:5-74
 6        android:minSdkVersion="22"
-6-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:5:15-41
+6-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:5:15-41
 7        android:targetSdkVersion="33" />
-7-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:5:42-71
+7-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:5:42-71
 8
 9    <instrumentation
-9-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:11:5-15:74
+9-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:11:5-15:74
 10        android:name="androidx.test.runner.AndroidJUnitRunner"
-10-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:11:22-76
+10-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:11:22-76
 11        android:functionalTest="false"
-11-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:14:22-52
+11-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:14:22-52
 12        android:handleProfiling="false"
-12-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:13:22-53
+12-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:13:22-53
 13        android:label="Tests for org.capacitor.quasar.app"
-13-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:15:22-72
+13-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:15:22-72
 14        android:targetPackage="org.capacitor.quasar.app" />
-14-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:12:22-70
+14-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:12:22-70
 15
 16    <uses-permission android:name="android.permission.REORDER_TASKS" />
 16-->[androidx.test:core:1.5.0] C:\Users\Maxim\.gradle\caches\transforms-3\ddfee9cf7028f2410f01a64fc4739834\transformed\core-1.5.0\AndroidManifest.xml:24:5-72
@@ -40,10 +40,10 @@
 22    </queries>
 23
 24    <application android:debuggable="true" >
-24-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:7:5-9:19
+24-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:7:5-9:19
 25        <uses-library android:name="android.test.runner" />
-25-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:8:9-60
-25-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest13634083357137127339.xml:8:23-57
+25-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:8:9-60
+25-->C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\build\intermediates\tmp\manifest\androidTest\debug\tempFile1ProcessTestManifest3541117406498795460.xml:8:23-57
 26
 27        <activity
 27-->[androidx.test:core:1.5.0] C:\Users\Maxim\.gradle\caches\transforms-3\ddfee9cf7028f2410f01a64fc4739834\transformed\core-1.5.0\AndroidManifest.xml:27:9-34:20

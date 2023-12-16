@@ -158,17 +158,20 @@
   </div>
 
   <div class="capacitor-only row justify-center">
-    <q-card class="q-pa-md card-mobile q-mb-sm">
+    <q-card
+      class="q-pa-md card-mobile q-mb-sm"
+      :class="{ 'paused-card': task[id].isPause }"
+    >
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
-          style="font-size: 13px; width: 260px"
+          style="font-size: 15px; width: 260px"
         >
           <!-- Name -->
           {{ task[id].task_name }}
           <div class="q-mt-sm">
             <q-chip
-              style="height: 20px; font-size: 8px"
+              style="height: 20px; font-size: 10px"
               text-color="dark"
               class="date text-weight-medium q-ma-none q-mr-sm"
             >
@@ -177,7 +180,7 @@
               - {{ formatDate(task[id].data_end) }}
             </q-chip>
             <q-chip
-              style="height: 20px; font-size: 8px"
+              style="height: 20px; font-size: 10px"
               text-color="negative"
               class="urgency q-ma-none"
             >
@@ -199,7 +202,7 @@
 
       <q-slide-transition>
         <div v-show="expanded">
-          <q-card-section class="text-subtitle2 no-padding">
+          <q-card-section class="text-h6 no-padding">
             {{ task[id].description }}
             <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
             voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
@@ -218,6 +221,17 @@
           </q-card-section>
         </div>
       </q-slide-transition>
+
+      <div v-if="task[id].isPause" class="paused-overlay">
+        <q-btn
+          class="no-padding resume-button"
+          @click.native="micro(task[id]._id)"
+          size="20px"
+          flat
+          icon="pause"
+        >
+        </q-btn>
+      </div>
     </q-card>
   </div>
 </template>
@@ -249,7 +263,7 @@ export default {
     async micro(id) {
       await Browser.open({
         //TODO заменить на нормальный адрес
-        url: `https://spa-five-sigma.vercel.app/#/task/:${id}`,
+        url: `https://spa-sable.vercel.app/#/task/:${id}`,
       });
     },
     taskStart(id) {

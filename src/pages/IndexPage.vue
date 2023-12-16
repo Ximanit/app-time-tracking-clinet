@@ -80,18 +80,21 @@ export default defineComponent({
   methods: {
     async getTask() {
       const id = VueCookie.get("id");
-      this.loading = true;
-      try {
-        const res = await api.get(`/task/user/${id}`, {
-          headers: {
-            authorization: VueCookie.get("token"),
-          },
-        });
-        this.tasks = res.data;
-        this.loading = false;
-      } catch (error) {
-        console.log("ERROR");
-        this.loading = false;
+      if (id !== null) {
+        this.loading = true;
+        try {
+          const res = await api.get(`/task/user/${id}`, {
+            headers: {
+              authorization: VueCookie.get("token"),
+            },
+          });
+          console.log(res);
+          this.tasks = res.data;
+          this.loading = false;
+        } catch (error) {
+          console.log("ERROR");
+          this.loading = false;
+        }
       }
     },
   },

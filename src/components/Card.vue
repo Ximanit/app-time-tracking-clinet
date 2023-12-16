@@ -80,22 +80,20 @@
   </div>
 
   <div class="mobile-only native-mobile-hide row justify-center">
-    <q-card class="q-pa-md card-mobile q-mb-sm">
-      <div v-if="task[id].isPause">
-        <q-card-section class="card-paused row justify-center">
-          <q-btn @click="taskStart(task[id]._id)" flat size="25px"> ❚❚ </q-btn>
-        </q-card-section>
-      </div>
-      <div v-else class="row inline justify-between q-mb-sm">
+    <q-card
+      class="q-pa-md card-mobile q-mb-sm"
+      :class="{ 'paused-card': task[id].isPause }"
+    >
+      <div class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
-          style="font-size: 13px; width: 260px"
+          style="font-size: 15px; width: 260px"
         >
           <!-- Name -->
           {{ task[id].task_name }}
           <div class="q-mt-sm">
             <q-chip
-              style="height: 20px; font-size: 8px"
+              style="height: 20px; font-size: 10px"
               text-color="dark"
               class="date text-weight-medium q-ma-none q-mr-sm"
             >
@@ -104,7 +102,7 @@
               - {{ formatDate(task[id].data_end) }}
             </q-chip>
             <q-chip
-              style="height: 20px; font-size: 8px"
+              style="height: 20px; font-size: 10px"
               text-color="negative"
               class="urgency q-ma-none"
             >
@@ -126,7 +124,7 @@
 
       <q-slide-transition>
         <div v-show="expanded">
-          <q-card-section class="text-subtitle2 no-padding">
+          <q-card-section class="text-h6 no-padding">
             {{ task[id].description }}
             <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
             voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
@@ -145,6 +143,17 @@
           </q-card-section>
         </div>
       </q-slide-transition>
+
+      <div v-if="task[id].isPause" class="paused-overlay">
+        <q-btn
+          class="no-padding resume-button"
+          @click.native="taskStart(task[id]._id)"
+          size="20px"
+          flat
+          icon="pause"
+        >
+        </q-btn>
+      </div>
     </q-card>
   </div>
 
@@ -268,20 +277,20 @@ export default {
 </script>
 
 <style scoped>
-.card-paused {
-  /* background: rgba(0, 0, 0, 0.5); */
-  padding: 0px;
-  width: 295px;
-  height: 57px; /* Затемнение экрана при паузе */
+.paused-card {
+  opacity: 0.5;
+  position: relative;
 }
 
-.pause-icon {
-  font-size: 24px;
-  color: rgb(0, 0, 0);
+.paused-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {

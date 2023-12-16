@@ -210,19 +210,19 @@
 
     <div class="row justify-center">
       <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
-        <q-card-section class="text-bold text-subtitle1 q-pa-none q-mb-lg">
+        <q-card-section class="text-bold text-h6 q-pa-none q-mb-lg">
           {{ task.task_name }}
         </q-card-section>
         <q-card-section class="q-pt-none q-px-none">
           <q-chip
-            style="height: 28px; font-size: 10px"
+            style="height: 28px; font-size: 12px"
             text-color="dark"
             class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
           >
             11.11.2023 - 14.11.2023
           </q-chip>
           <q-chip
-            style="height: 28px; font-size: 10px"
+            style="height: 28px; font-size: 12px"
             text-color="negative"
             class="urgency q-ma-none q-px-sm q-py-xs"
             >{{ task.urgency }}</q-chip
@@ -230,7 +230,7 @@
         </q-card-section>
         <q-card-section
           class="q-pa-none q-mb-xl"
-          style="font-size: 13px; line-height: 16px"
+          style="font-size: 16px; line-height: 24px"
         >
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
           voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
@@ -272,8 +272,58 @@
       </q-card>
     </div>
     <q-dialog v-model="finishTask">
-      <q-card style="width: 328px; height: 328px">
-        <q-card-section style="font-size: 17px">
+      <q-card style="width: 328px; height: 378px">
+        <q-card-section
+          v-if="task.task_name === 'Быстрая задача'"
+          style="font-size: 17px"
+        >
+          <div>
+            Название задачи
+            <q-input outlined autogrow v-model="nameTask" class="q-mb-lg">
+              <template v-slot:append>
+                <q-btn
+                  @click="startButton()"
+                  round
+                  dense
+                  flat
+                  :icon="isRecording ? 'mic_off' : 'mic'"
+                />
+              </template>
+            </q-input>
+          </div>
+
+          <div>
+            Выберите проект
+            <q-select
+              v-model="model"
+              outlined
+              :options="options"
+              label="Выбор проекта"
+              :dense="true"
+            />
+          </div>
+
+          <div>
+            Комментарий по работе
+            <q-input
+              outlined
+              autogrow
+              v-model="finalTranscript"
+              class="q-mb-lg"
+            >
+              <template v-slot:append>
+                <q-btn
+                  @click="startButton()"
+                  round
+                  dense
+                  flat
+                  :icon="isRecording ? 'mic_off' : 'mic'"
+                />
+              </template>
+            </q-input>
+          </div>
+        </q-card-section>
+        <q-card-section v-else style="font-size: 17px">
           Комментарий по работе
 
           <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
@@ -356,12 +406,7 @@ export default defineComponent({
       finishTask: false,
       fastTask: false,
       model: null,
-      options: [
-        "Журнал заявок",
-        "Мобильное приложение",
-        "Сайт дополнительного обучения",
-        "Главная страница",
-      ],
+      options: [],
       task: [],
       isPause: false,
       recognition: null,
@@ -371,6 +416,7 @@ export default defineComponent({
       mediaRecorder: null,
       audioChunks: [],
       finalTranscript: "",
+      nameTask: "",
       loading: false,
 
       isTimerRunning: false,
@@ -387,6 +433,7 @@ export default defineComponent({
   mounted() {
     this.getTask();
     this.startTimer();
+    this.getProject();
   },
   methods: {
     async getTask() {
@@ -396,9 +443,22 @@ export default defineComponent({
         );
         this.task = res.data;
         this.isPause = this.task.isPause;
-        console.log(this.isPause);
+        this.elapsedTime = this.task.save_time;
+        console.log(this.isPause, this.elapsedTime);
       } catch (error) {
         console.log("ERROR");
+      }
+    },
+    async getProject() {
+      try {
+        const res = await api.get("/project/");
+        res.data.forEach((item) => {
+          if (item.name) {
+            this.options.push(item.name);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching project:", error);
       }
     },
     async finish() {
@@ -413,7 +473,7 @@ export default defineComponent({
         const res = await api.put(
           `/task/${this.$route.params.id.substring(1)}`,
           {
-            end: new Date().toLocaleDateString(),
+            end: new Date(),
             comment: this.finalTranscript,
             complited: true,
           }
@@ -487,7 +547,6 @@ export default defineComponent({
         console.error("Error during startPause:", error);
       }
     },
-
     async endPause() {
       try {
         this.isPause = false;
@@ -515,18 +574,20 @@ export default defineComponent({
       }
     },
     async createFastTask() {
-      const today = new Date().toLocaleDateString();
-      const tomorrow = new Date().toLocaleDateString(24 * 3600 * 1000);
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
       try {
-        const res = await api.post(
-          "/task",
+        const response = await api.post(
+          "/task/",
           {
             user: VueCookie.get("id"),
-            task_name: "Быстрая задача",
+            task_name: "Быстрая задача1",
             description: " ",
             data_start: today,
             data_end: tomorrow,
             pause: [],
+            save_time: 0,
           },
           {
             headers: {
@@ -534,9 +595,10 @@ export default defineComponent({
             },
           }
         );
-        console.log(res.data._id);
-        this.startPause();
-        this.$router.push(`/task/:${res.data._id}`);
+        if (this.isPause !== true) this.startPause();
+        const id = response.data._id;
+        console.log(id);
+        this.$router.push({ path: `/task/:${id}` });
       } catch (error) {
         console.log("Error");
       }

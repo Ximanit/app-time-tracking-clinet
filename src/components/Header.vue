@@ -50,6 +50,7 @@
       <q-select
         :dense="true"
         outlined
+        default="Все проекты"
         v-model="model"
         :options="options"
         v-if="this.route === '/'"
@@ -73,7 +74,6 @@
         ></q-btn>
       </div>
       <q-space />
-
       <q-btn class="btn-q q-pa-sm q-mr-md">
         <div style="color: black">?</div>
       </q-btn>
@@ -89,34 +89,28 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import VueCookie from "vue-cookie";
+import { api } from "../boot/axios";
 
 export default {
   name: "Header",
-  mounted() {
-    this.getRoute();
-  },
   data() {
     return {
       route: "",
+      model: null,
+      options: [],
     };
   },
-  setup() {
-    return {
-      model: ref(null),
-      options: [
-        "Журнал заявок",
-        "Мобильное приложение",
-        "Сайт дополнительного обучения",
-        "Главная страница",
-      ],
-    };
+  mounted() {
+    this.getRoute();
+    this.getProject();
   },
+
   methods: {
     logout() {
       VueCookie.delete("token");
       VueCookie.delete("username");
+      VueCookie.delete("id");
       this.$router.replace("/auth");
     },
     async updateTask() {
@@ -129,6 +123,18 @@ export default {
     getRoute() {
       this.route = this.$route.fullPath;
       console.log(this.$route);
+    },
+    async getProject() {
+      try {
+        const res = await api.get("/project/");
+        res.data.forEach((item) => {
+          if (item.name) {
+            this.options.push(item.name);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching project:", error);
+      }
     },
   },
 };

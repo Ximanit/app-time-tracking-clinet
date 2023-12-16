@@ -158,7 +158,10 @@
   </div>
 
   <div class="capacitor-only row justify-center">
-    <q-card class="q-pa-md card-mobile q-mb-sm">
+    <q-card
+      class="q-pa-md card-mobile q-mb-sm"
+      :class="{ 'paused-card': task[id].isPause }"
+    >
       <div class="row inline justify-between q-mb-sm">
         <q-card-section
           class="text-bold q-pa-none"
@@ -222,7 +225,7 @@
       <div v-if="task[id].isPause" class="paused-overlay">
         <q-btn
           class="no-padding resume-button"
-          @click.native="taskStart(task[id]._id)"
+          @click.native="micro(task[id]._id)"
           size="20px"
           flat
           icon="pause"
@@ -260,7 +263,7 @@ export default {
     async micro(id) {
       await Browser.open({
         //TODO заменить на нормальный адрес
-        url: `https://spa-five-sigma.vercel.app/#/task/:${id}`,
+        url: `https://spa-sable.vercel.app/#/task/:${id}`,
       });
     },
     taskStart(id) {

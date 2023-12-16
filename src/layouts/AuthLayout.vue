@@ -36,7 +36,7 @@
     <div class="text-h4 text-center title">Авторизация</div>
     <q-img
       src="../assets/mobile-icon.svg"
-      style="width: 226px; height: 150px; margin: 24px 20px 24px 60px"
+      style="width: 226px; height: 150px; margin: 24px 20px 24px 98px"
     />
     <div class="q-pa-md">
       <q-input
@@ -45,6 +45,7 @@
         label="Логин"
         outlined
         class="q-mb-md"
+        style="border: 1px solid #8cc63e; border-radius: 8px"
       >
         <template v-slot:prepend>
           <q-icon name="mail" />
@@ -57,18 +58,22 @@
         label="Пароль"
         outlined
         class="q-mb-lg"
+        :type="isPwd ? 'password' : 'text'"
+        style="border: 1px solid #8cc63e; border-radius: 8px"
       >
-        <template v-slot:prepend>
-          <q-icon name="key" />
-        </template>
         <template v-slot:append>
-          <q-icon name="visibility_off" />
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
         </template>
       </q-input>
       <div class="row justify-center">
         <q-btn
           @click="login()"
           text-color="primary"
+          size="19px"
           style="
             border-radius: 8px;
             max-width: 223px;
@@ -93,7 +98,7 @@ export default {
     return {
       username: "",
       password: "",
-      isPwd: ref(true),
+      isPwd: true,
     };
   },
   methods: {
@@ -133,7 +138,7 @@ export default {
         VueCookies.set("token", response.data.token, Infinity);
         VueCookies.set("username", this.username, Infinity);
         VueCookies.set("id", response.data.id, Infinity);
-        console.log(response.data);
+        console.log(response);
         if (
           response.data.message === `User with that ${this.username} dont find`
         ) {

@@ -46,19 +46,34 @@
 
   <q-header class="mobile-only">
     <q-toolbar class="no-padding tlbr">
+      <!-- <div v-if="this.route === '/'"> -->
       <q-select
         :dense="true"
         outlined
+        default="Все проекты"
         v-model="model"
         :options="options"
+        v-if="this.route === '/'"
         label="Выбор проекта"
         bg-color="white"
         class="q-ml-md q-mt-md q-mb-md q-mr-xl"
         style="width: 142px"
       />
-      <q-btn class="btn-refresh q-pa-sm q-mr-md">
+      <q-btn v-if="this.route === '/'" class="btn-refresh q-pa-sm q-mr-md">
         <q-icon color="dark" name="autorenew" />
       </q-btn>
+      <!-- </div> -->
+      <div v-else>
+        <q-btn
+          to="/"
+          size="20px"
+          flat
+          round
+          color="dark"
+          icon="navigate_before"
+        ></q-btn>
+      </div>
+      <q-space />
       <q-btn class="btn-q q-pa-sm q-mr-md">
         <div style="color: black">?</div>
       </q-btn>
@@ -74,26 +89,28 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import VueCookie from "vue-cookie";
+import { api } from "../boot/axios";
 
 export default {
   name: "Header",
-  setup() {
+  data() {
     return {
-      model: ref(null),
-      options: [
-        "Журнал заявок",
-        "Мобильное приложение",
-        "Сайт дополнительного обучения",
-        "Главная страница",
-      ],
+      route: "",
+      model: null,
+      options: [],
     };
   },
+  mounted() {
+    this.getRoute();
+    this.getProject();
+  },
+
   methods: {
     logout() {
       VueCookie.delete("token");
       VueCookie.delete("username");
+      VueCookie.delete("id");
       this.$router.replace("/auth");
     },
     async updateTask() {
@@ -101,6 +118,22 @@ export default {
         const res = await api.get("/task/");
       } catch (error) {
         console.log("ERROR");
+      }
+    },
+    getRoute() {
+      this.route = this.$route.fullPath;
+      console.log(this.$route);
+    },
+    async getProject() {
+      try {
+        const res = await api.get("/project/");
+        res.data.forEach((item) => {
+          if (item.name) {
+            this.options.push(item.name);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching project:", error);
       }
     },
   },

@@ -632,52 +632,83 @@ export default defineComponent({
         console.log("Error");
       }
     },
-    startButton() {
-      const serverURL =
-        "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
+    async startButton() {
+      // Проверка наличия поддержки getUserMedia в браузере
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error("Ваш браузер не поддерживает getUserMedia.");
+        return;
+      }
 
-      if (!this.isRecording) {
-        navigator.mediaDevices
-          .getUserMedia({ audio: true })
-          .then((stream) => {
-            this.mediaRecorder = new MediaRecorder(stream);
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const microphones = devices.filter(
+          (device) => device.kind === "audioinput"
+        );
 
-            this.mediaRecorder.addEventListener("dataavailable", (event) => {
-              this.audioChunks.push(event.data);
-            });
+        if (microphones.length === 0) {
+          console.error("Микрофон не обнаружен.");
+          return;
+        }
 
-            this.mediaRecorder.addEventListener("stop", () => {
-              const audioBlob = new Blob(this.audioChunks);
-              const fd = new FormData();
-              fd.append("audio", audioBlob);
-              this.loading = true;
-              // Отправка на сервер
-              fetch(serverURL, {
-                method: "POST",
-                body: fd,
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  this.finalTranscript = data.text;
-                  console.log(data.text);
-                  this.loading = false;
+        const serverURL =
+          "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
+
+        if (!this.isRecording) {
+          navigator.mediaDevices
+            .getUserMedia({ audio: true })
+            .then((stream) => {
+              this.mediaRecorder = new MediaRecorder(stream);
+
+              this.mediaRecorder.addEventListener("dataavailable", (event) => {
+                this.audioChunks.push(event.data);
+              });
+
+              this.mediaRecorder.addEventListener("stop", () => {
+                const audioBlob = new Blob(this.audioChunks);
+                const fd = new FormData();
+                fd.append("audio", audioBlob);
+                this.loading = true;
+
+                // Отправка на сервер
+                fetch(serverURL, {
+                  method: "POST",
+                  body: fd,
                 })
-                .catch((error) => {
-                  console.error("Error during server request:", error);
-                });
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error("Ошибка при отправке файла на сервер.");
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    this.finalTranscript = data.text;
+                    console.log(data.text);
+                    this.loading = false;
+                  })
+                  .catch((error) => {
+                    this.$q.notify({
+                      type: "negative",
+                      message: "Ошибка отправки записи на сервер",
+                    });
+                    console.error("Error during server request:", error);
+                    this.loading = false;
+                  });
 
-              this.audioChunks = [];
+                this.audioChunks = [];
+              });
+
+              this.mediaRecorder.start();
+              this.isRecording = true;
+            })
+            .catch((error) => {
+              console.error("Error accessing microphone:", error);
             });
-
-            this.mediaRecorder.start();
-            this.isRecording = true;
-          })
-          .catch((error) => {
-            console.error("Error accessing microphone:", error);
-          });
-      } else {
-        this.mediaRecorder.stop();
-        this.isRecording = false;
+        } else {
+          this.mediaRecorder.stop();
+          this.isRecording = false;
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке микрофона:", error);
       }
     },
   },

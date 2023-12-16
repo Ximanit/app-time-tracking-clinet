@@ -42,7 +42,7 @@
         :isPause="task.isPause"
       />
     </div>
-    <div v-if="loading" class="text-center">
+    <div v-if="loading" class="absolute-center">
       <q-spinner-ball color="primary" size="8em" />
     </div>
   </q-page>

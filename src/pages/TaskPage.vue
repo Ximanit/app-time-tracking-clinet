@@ -300,6 +300,11 @@
               :options="options"
               label="Выбор проекта"
               :dense="true"
+              option-value="id"
+              option-label="name"
+              option-disable="inactive"
+              emit-value
+              map-options
             />
           </div>
 
@@ -394,7 +399,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { api } from "../boot/axios";
 import Header from "../components/Header.vue";
 import VueCookie from "vue-cookie";
@@ -453,9 +458,11 @@ export default defineComponent({
       try {
         const res = await api.get("/project/");
         res.data.forEach((item) => {
-          if (item.name) {
-            this.options.push(item.name);
-          }
+          this.options.push({
+            id: item._id,
+            name: item.name,
+          });
+          console.log(this.options);
         });
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -469,18 +476,36 @@ export default defineComponent({
         });
         return;
       }
-      try {
-        const res = await api.put(
-          `/task/${this.$route.params.id.substring(1)}`,
-          {
-            end: new Date(),
-            comment: this.finalTranscript,
-            complited: true,
-          }
-        );
-        console.log(res.data);
-      } catch (error) {
-        console.log("ERROR");
+      if (this.task.task_name !== "Быстрая задача") {
+        try {
+          const res = await api.put(
+            `/task/${this.$route.params.id.substring(1)}`,
+            {
+              end: new Date(),
+              comment: this.finalTranscript,
+              complited: true,
+            }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log("ERROR");
+        }
+      } else {
+        try {
+          const res = await api.put(
+            `/task/${this.$route.params.id.substring(1)}`,
+            {
+              task_name: this.nameTask,
+              project: this.model,
+              end: new Date(),
+              comment: this.finalTranscript,
+              complited: true,
+            }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log("ERROR");
+        }
       }
       window.close();
       this.$router.push(`/`);
@@ -598,9 +623,61 @@ export default defineComponent({
         if (this.isPause !== true) this.startPause();
         const id = response.data._id;
         console.log(id);
-        this.$router.push({ path: `/task/:${id}` });
+        this.$router.push(`/task/:${id}`);
+        setTimeout(() => {
+          this.getTask();
+          this.startTimer();
+        }, 0.1);
       } catch (error) {
         console.log("Error");
+      }
+    },
+    startButton() {
+      const serverURL =
+        "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
+
+      if (!this.isRecording) {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            this.mediaRecorder = new MediaRecorder(stream);
+
+            this.mediaRecorder.addEventListener("dataavailable", (event) => {
+              this.audioChunks.push(event.data);
+            });
+
+            this.mediaRecorder.addEventListener("stop", () => {
+              const audioBlob = new Blob(this.audioChunks);
+              const fd = new FormData();
+              fd.append("audio", audioBlob);
+              this.loading = true;
+              // Отправка на сервер
+              fetch(serverURL, {
+                method: "POST",
+                body: fd,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  this.finalTranscript = data.text;
+                  console.log(data.text);
+                  this.loading = false;
+                })
+                .catch((error) => {
+                  console.error("Error during server request:", error);
+                });
+
+              this.audioChunks = [];
+            });
+
+            this.mediaRecorder.start();
+            this.isRecording = true;
+          })
+          .catch((error) => {
+            console.error("Error accessing microphone:", error);
+          });
+      } else {
+        this.mediaRecorder.stop();
+        this.isRecording = false;
       }
     },
   },

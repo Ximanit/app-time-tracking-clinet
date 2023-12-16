@@ -29,9 +29,6 @@ org.capacitor.quasar.app-merged_res-27 C:\Users\Maxim\Desktop\programming\app-ti
 org.capacitor.quasar.app-debug-28 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\src\debug\res
 org.capacitor.quasar.app-main-29 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\app\src\main\res
 org.capacitor.quasar.app-packaged_res-30 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\android\capacitor-cordova-android-plugins\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-31 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor-community\media\android\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-32 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\android\capacitor\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-33 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\app\android\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-34 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\browser\android\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-35 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\splash-screen\android\build\intermediates\packaged_res\debug
-org.capacitor.quasar.app-packaged_res-36 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@jcesarmobile\ssl-skip\android\build\intermediates\packaged_res\debug
+org.capacitor.quasar.app-packaged_res-31 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\android\capacitor\build\intermediates\packaged_res\debug
+org.capacitor.quasar.app-packaged_res-32 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\app\android\build\intermediates\packaged_res\debug
+org.capacitor.quasar.app-packaged_res-33 C:\Users\Maxim\Desktop\programming\app-time-tracking-clinet\src-capacitor\node_modules\@capacitor\browser\android\build\intermediates\packaged_res\debug

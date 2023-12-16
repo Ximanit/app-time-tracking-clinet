@@ -1,3 +1,0 @@
-org.capacitor.quasar.app.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

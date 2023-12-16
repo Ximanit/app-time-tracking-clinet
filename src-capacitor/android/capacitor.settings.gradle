@@ -13,3 +13,6 @@ project(':capacitor-browser').projectDir = new File('../node_modules/@capacitor/
 
 include ':capacitor-splash-screen'
 project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capacitor/splash-screen/android')
+
+include ':jcesarmobile-ssl-skip'
+project(':jcesarmobile-ssl-skip').projectDir = new File('../node_modules/@jcesarmobile/ssl-skip/android')

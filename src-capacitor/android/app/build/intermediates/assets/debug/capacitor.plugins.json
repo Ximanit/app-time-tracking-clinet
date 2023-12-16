@@ -14,9 +14,5 @@
 	{
 		"pkg": "@capacitor/splash-screen",
 		"classpath": "com.capacitorjs.plugins.splashscreen.SplashScreenPlugin"
-	},
-	{
-		"pkg": "@jcesarmobile/ssl-skip",
-		"classpath": "com.jcesarmobile.sslskip.SslSkipPlugin"
 	}
 ]

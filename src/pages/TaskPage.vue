@@ -654,6 +654,7 @@ export default defineComponent({
         }
       }
       this.$router.push(`/`);
+      window.close();
     },
     async finishCapacitor() {
       if (this.finalTranscript == "") {
@@ -694,6 +695,7 @@ export default defineComponent({
           console.log("ERROR");
         }
       }
+      window.close();
       Browser.close();
     },
     startTimer() {

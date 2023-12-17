@@ -195,10 +195,11 @@ export default {
       }
     },
     back() {
-      this.$router.push("/");
+      // this.$router.push("/");
+      window.close();
     },
     backCapacitor() {
-      Browser.close();
+      window.close();
     },
     handleSelection(value) {
       console.log("Выбран элемент:", value);

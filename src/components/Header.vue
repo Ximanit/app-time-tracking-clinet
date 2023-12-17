@@ -146,7 +146,7 @@ export default {
     back() {
       // window.close();
       Browser.close();
-      Browser.close();
+      // Browser.close();
     },
     handleSelection(value) {
       console.log("Выбран элемент:", value);

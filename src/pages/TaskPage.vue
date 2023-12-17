@@ -462,7 +462,6 @@ export default defineComponent({
             }
           );
           console.log(res.data);
-          Browser.close();
         } catch (error) {
           console.log("ERROR");
         }
@@ -479,11 +478,11 @@ export default defineComponent({
             }
           );
           console.log(res.data);
-          Browser.close();
         } catch (error) {
           console.log("ERROR");
         }
       }
+      Browser.close();
     },
 
     startTimer() {

@@ -159,13 +159,13 @@ export default defineComponent({
         );
         const id = response.data._id;
 
-        Browser.open({
+        await Browser.open({
           url: `https://spa-chi-pink.vercel.app/#/task/:${id}`,
         });
         // this.$router.push(`/task/:${id}`);
-        setTimeout(() => {
-          this.getTask();
-        }, 0.1);
+        // setTimeout(() => {
+        //   this.getTask();
+        // }, 0.1);
       } catch (error) {
         console.log("Error");
       }

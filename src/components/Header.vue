@@ -93,7 +93,7 @@
     </q-toolbar>
   </q-header>
 
-  <q-header class="capacitor-only native-mobile-hide">
+  <q-header class="capacitor-only">
     <q-toolbar class="tlbr">
       <!-- <div v-if="this.route === '/'"> -->
       <q-select
@@ -198,8 +198,7 @@ export default {
       this.$router.push("/");
     },
     backCapacitor() {
-      window.close();
-      this.$router.push("/");
+      Browser.close();
     },
     handleSelection(value) {
       console.log("Выбран элемент:", value);

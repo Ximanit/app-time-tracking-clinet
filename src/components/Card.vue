@@ -272,9 +272,9 @@ export default {
   methods: {
     async micro(id) {
       await Browser.open({
-        //TODO заменить на нормальный адрес
-        url: `https://spa-black-rho.vercel.app/#/task/:${id}`,
+        url: `https://spa-six-topaz.vercel.app/#/task/:${id}`,
       });
+      console.log("Capacitor");
     },
     taskStart(id) {
       console.log(id);

@@ -202,6 +202,7 @@
           width: 328px;
           height: 52px;
           background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
+          margin-top: 64px;
         "
         @click="createFastTask()"
         >Оформить быструю задачу</q-btn
@@ -375,6 +376,7 @@
           width: 328px;
           height: 52px;
           background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
+          margin-top: 64px;
         "
         @click="createFastTask()"
         >Оформить быструю задачу</q-btn
@@ -431,7 +433,7 @@
             style="width: 163px; border-radius: 4px"
             color="positive"
             outline
-            @click="(finishTask = !finishTask), stopTimer()"
+            @click="(finishTaskCapacitor = !finishTaskCapacitor), stopTimer()"
           >
             Завершить
           </q-btn>
@@ -446,7 +448,7 @@
         </div>
       </q-card>
     </div>
-    <q-dialog v-model="finishTask" persistent>
+    <q-dialog v-model="finishTaskCapacitor" persistent>
       <q-card style="width: 328px; max-height: 378px">
         <q-card-section
           v-if="task.task_name === 'Быстрая задача'"
@@ -546,13 +548,14 @@ import { defineComponent, ref } from "vue";
 import { api } from "../boot/axios";
 import Header from "../components/Header.vue";
 import VueCookie from "vue-cookie";
+import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
   data() {
     return {
       finishTask: false,
-      fastTask: false,
+      finishTaskCapacitor: false,
       model: null,
       options: [],
       task: [],
@@ -691,8 +694,7 @@ export default defineComponent({
           console.log("ERROR");
         }
       }
-      window.close();
-      this.$router.push(`/`);
+      Browser.close();
     },
     startTimer() {
       this.isTimerRunning = true;

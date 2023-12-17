@@ -2,7 +2,7 @@
   "name": "app-time-tracking",
   "version": "0.0.1",
   "description": "project for Nevada Group on the CUB",
-  "productName": "app-time-tracking",
+  "productName": "Учет рабочего времени",
   "author": "Ximanit <122241859+Ximanit@users.noreply.github.com>",
   "private": true,
   "scripts": {

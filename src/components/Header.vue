@@ -46,7 +46,6 @@
 
   <q-header class="mobile-only">
     <q-toolbar class="tlbr">
-      <!-- <div v-if="this.route === '/'"> -->
       <q-select
         :dense="true"
         outlined
@@ -67,7 +66,6 @@
         text-color="black"
         @click="updateTask()"
       />
-      <!-- </div> -->
       <div v-else>
         <q-btn
           @click="back()"
@@ -92,55 +90,6 @@
       </q-btn>
     </q-toolbar>
   </q-header>
-
-  <!-- <q-header class="capacitor-only">
-    <q-toolbar class="tlbr">
-     //<div v-if="this.route === '/'">
-      <q-select
-        :dense="true"
-        outlined
-        default="Все проекты"
-        v-model="model"
-        :options="options"
-        v-if="this.route === '/'"
-        label="Выбор проекта"
-        bg-color="white"
-        class="q-ml-md q-mt-md q-mb-md q-mr-xl"
-        style="width: 142px; font-size: 10px; margin-left: 20px"
-        @update:model-value="handleSelection"
-      />
-      <q-btn
-        v-if="this.route === '/'"
-        class="btn-refresh q-pa-sm q-mr-md"
-        icon="refresh"
-        text-color="black"
-        @click="updateTask()"
-      />
-      //</div>
-      <div v-else>
-        <q-btn
-          @click="backCapacitor()"
-          size="20px"
-          flat
-          round
-          color="dark"
-          icon="navigate_before"
-          style="margin-right: 198px"
-          :disable="ispause"
-        ></q-btn>
-      </div>
-      <q-btn class="btn-q q-pa-sm q-mr-md">
-        <div style="color: black">?</div>
-      </q-btn>
-      <q-btn flat @click="logout()">
-        <img
-          style="width: 32px; height: 32px"
-          src="../assets/exit-icon-mobile.svg"
-          alt="exit-open-logo"
-        />
-      </q-btn>
-    </q-toolbar>
-  </q-header> -->
 </template>
 
 <script>
@@ -195,10 +144,6 @@ export default {
       }
     },
     back() {
-      // this.$router.push("/");
-      window.close();
-    },
-    backCapacitor() {
       window.close();
     },
     handleSelection(value) {

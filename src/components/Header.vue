@@ -56,7 +56,7 @@
         label="Выбор проекта"
         bg-color="white"
         class="q-ml-md q-mt-md q-mb-md q-mr-xl"
-        style="width: 142px; font-size: 10px; margin-left: 20px"
+        style="width: 142px; margin-left: 20px"
         @update:model-value="handleSelection"
       />
       <q-btn
@@ -144,7 +144,9 @@ export default {
       }
     },
     back() {
-      window.close();
+      // window.close();
+      Browser.close();
+      Browser.close();
     },
     handleSelection(value) {
       console.log("Выбран элемент:", value);

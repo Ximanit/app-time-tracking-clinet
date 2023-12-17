@@ -202,7 +202,6 @@
           width: 328px;
           height: 52px;
           background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
-          margin-top: 64px;
         "
         @click="createFastTask()"
         >Оформить быструю задачу</q-btn
@@ -457,6 +456,7 @@ export default defineComponent({
             }
           );
           console.log(res.data);
+          Browser.close();
         } catch (error) {
           console.log("ERROR");
         }
@@ -473,11 +473,11 @@ export default defineComponent({
             }
           );
           console.log(res.data);
+          Browser.close();
         } catch (error) {
           console.log("ERROR");
         }
       }
-      window.close();
     },
 
     startTimer() {
@@ -592,7 +592,10 @@ export default defineComponent({
         if (this.isPause !== true) this.startPause();
         const id = response.data._id;
         console.log(id);
-        this.$router.push(`/task/:${id}`);
+        Browser.open({
+          url: `https://spa-rho-eight.vercel.app/#/task/:${id}`,
+        });
+        // this.$router.push(`/task/:${id}`);
         setTimeout(() => {
           this.getTask();
         }, 0.1);

@@ -192,7 +192,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only native-mobile-hide">
+  <q-page class="mobile-only">
     <Header :ispause="!this.isPause" />
     <div class="row justify-center">
       <q-btn
@@ -366,7 +366,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="capacitor-only">
+  <!-- <q-page class="capacitor-only">
     <Header :ispause="!this.isPause" />
     <div class="row justify-center">
       <q-btn
@@ -409,10 +409,10 @@
           style="font-size: 16px; line-height: 24px"
         >
           {{ task.description }}
-          <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
-          voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
-          ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
-          fugiat animi perspiciatis. -->
+          //Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+          //voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
+          //ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
+          //fugiat animi perspiciatis.
         </q-card-section>
         <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
           {{ formattedTime }}
@@ -540,7 +540,7 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-  </q-page>
+  </q-page> -->
 </template>
 
 <script>

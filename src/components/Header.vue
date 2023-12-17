@@ -44,7 +44,7 @@
     </q-toolbar>
   </q-header>
 
-  <q-header class="mobile-only native-mobile-hide">
+  <q-header class="mobile-only">
     <q-toolbar class="tlbr">
       <!-- <div v-if="this.route === '/'"> -->
       <q-select
@@ -93,9 +93,9 @@
     </q-toolbar>
   </q-header>
 
-  <q-header class="capacitor-only">
+  <!-- <q-header class="capacitor-only">
     <q-toolbar class="tlbr">
-      <!-- <div v-if="this.route === '/'"> -->
+     //<div v-if="this.route === '/'">
       <q-select
         :dense="true"
         outlined
@@ -116,7 +116,7 @@
         text-color="black"
         @click="updateTask()"
       />
-      <!-- </div> -->
+      //</div>
       <div v-else>
         <q-btn
           @click="backCapacitor()"
@@ -140,7 +140,7 @@
         />
       </q-btn>
     </q-toolbar>
-  </q-header>
+  </q-header> -->
 </template>
 
 <script>

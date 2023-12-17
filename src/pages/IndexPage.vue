@@ -160,7 +160,7 @@ export default defineComponent({
         const id = response.data._id;
 
         await Browser.open({
-          url: `https://spa-chi-pink.vercel.app/#/task/:${id}`,
+          url: `https://spa-lac-omega.vercel.app/#/task/:${id}`,
         });
         // this.$router.push(`/task/:${id}`);
         // setTimeout(() => {

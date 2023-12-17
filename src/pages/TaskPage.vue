@@ -482,7 +482,7 @@ export default defineComponent({
           console.log("ERROR");
         }
       }
-      Browser.close();
+      window.close();
     },
 
     startTimer() {
@@ -597,10 +597,7 @@ export default defineComponent({
         if (this.isPause !== true) this.startPause();
         const id = response.data._id;
         console.log(id);
-        Browser.open({
-          url: `https://spa-chi-pink.vercel.app/#/task/:${id}`,
-        });
-        // this.$router.push(`/task/:${id}`);
+        this.$router.push(`/task/:${id}`);
         setTimeout(() => {
           this.getTask();
         }, 0.1);

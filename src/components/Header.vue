@@ -144,8 +144,8 @@ export default {
       }
     },
     back() {
-      // window.close();
-      Browser.close();
+      window.close();
+      // Browser.close();
       // Browser.close();
     },
     handleSelection(value) {

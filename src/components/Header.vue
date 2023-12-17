@@ -45,7 +45,7 @@
   </q-header>
 
   <q-header class="mobile-only">
-    <q-toolbar class="no-padding tlbr">
+    <q-toolbar class="tlbr">
       <!-- <div v-if="this.route === '/'"> -->
       <q-select
         :dense="true"
@@ -57,23 +57,29 @@
         label="Выбор проекта"
         bg-color="white"
         class="q-ml-md q-mt-md q-mb-md q-mr-xl"
-        style="width: 142px"
+        style="width: 142px; font-size: 10px; margin-left: 20px"
+        @update:model-value="handleSelection"
       />
-      <q-btn v-if="this.route === '/'" class="btn-refresh q-pa-sm q-mr-md">
-        <q-icon color="dark" name="autorenew" />
-      </q-btn>
+      <q-btn
+        v-if="this.route === '/'"
+        class="btn-refresh q-pa-sm q-mr-md"
+        icon="refresh"
+        text-color="black"
+        @click="updateTask()"
+      />
       <!-- </div> -->
       <div v-else>
         <q-btn
-          to="/"
+          @click="back()"
           size="20px"
           flat
           round
           color="dark"
           icon="navigate_before"
+          style="margin-right: 198px"
+          :disable="ispause"
         ></q-btn>
       </div>
-      <q-space />
       <q-btn class="btn-q q-pa-sm q-mr-md">
         <div style="color: black">?</div>
       </q-btn>
@@ -89,16 +95,23 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import VueCookie from "vue-cookie";
 import { api } from "../boot/axios";
 
 export default {
   name: "Header",
+  props: {
+    ispause: {
+      type: Boolean,
+    },
+  },
   data() {
     return {
       route: "",
       model: null,
       options: [],
+      // isPause: ref(false),
     };
   },
   mounted() {
@@ -113,16 +126,12 @@ export default {
       VueCookie.delete("id");
       this.$router.replace("/auth");
     },
-    async updateTask() {
-      try {
-        const res = await api.get("/task/");
-      } catch (error) {
-        console.log("ERROR");
-      }
+    updateTask() {
+      console.log("В Header кнопка работает");
+      this.$emit("update-task");
     },
     getRoute() {
       this.route = this.$route.fullPath;
-      console.log(this.$route);
     },
     async getProject() {
       try {
@@ -135,6 +144,14 @@ export default {
       } catch (error) {
         console.error("Error fetching project:", error);
       }
+    },
+    back() {
+      this.$router.push("/");
+      window.close();
+    },
+    handleSelection(value) {
+      console.log("Выбран элемент:", value);
+      // Добавьте свой код обработки выбора элемента здесь
     },
   },
 };

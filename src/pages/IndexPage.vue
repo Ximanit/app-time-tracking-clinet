@@ -1,6 +1,6 @@
 <template>
   <q-page class="desktop-only">
-    <Header />
+    <Header @update-task="updateTask()" />
 
     <!-- TODO переделать -->
     <div class="q-pt-xl desktop-only" style="margin-left: 314px">
@@ -24,7 +24,7 @@
   </q-page>
 
   <q-page class="mobile-only">
-    <Header />
+    <Header @update-task="updateTask()" />
     <div v-if="!token" class="fixed-center text-center text-h3">
       Чтобы получить задачи, авторизуйтесь
     </div>
@@ -95,6 +95,26 @@ export default defineComponent({
           console.log("ERROR");
           this.loading = false;
         }
+      }
+    },
+    async updateTask() {
+      this.loading = true;
+      console.log("Событие нажатия обработано корректно");
+      try {
+        const res = await api.get("/task/upload/task", {
+          headers: {
+            authorization: VueCookie.get("token"),
+          },
+        });
+        console.log(res);
+        this.tasks = res.data;
+        this.loading = false;
+      } catch (error) {
+        this.$q.notify({
+          type: "negative",
+          message: "Возникла ошибка при подключении к серверу",
+        });
+        this.loading = false;
       }
     },
   },

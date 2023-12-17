@@ -193,7 +193,7 @@
   </q-page>
 
   <q-page class="mobile-only">
-    <Header />
+    <Header :ispause="!this.isPause" />
     <div class="row justify-center">
       <q-btn
         class="q-mb-md"
@@ -219,11 +219,12 @@
             text-color="dark"
             class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
           >
-            11.11.2023 - 14.11.2023
+            {{ formatDate(task.data_start) }}
+            - {{ formatDate(task.data_end) }}
           </q-chip>
           <q-chip
             style="height: 28px; font-size: 12px"
-            text-color="negative"
+            :style="getUrgencyStyle(task.urgency)"
             class="urgency q-ma-none q-px-sm q-py-xs"
             >{{ task.urgency }}</q-chip
           >
@@ -232,10 +233,11 @@
           class="q-pa-none q-mb-xl"
           style="font-size: 16px; line-height: 24px"
         >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+          {{ task.description }}
+          <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
           voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
           ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
-          fugiat animi perspiciatis.
+          fugiat animi perspiciatis. -->
         </q-card-section>
         <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
           {{ formattedTime }}
@@ -271,8 +273,8 @@
         </div>
       </q-card>
     </div>
-    <q-dialog v-model="finishTask">
-      <q-card style="width: 328px; height: 378px">
+    <q-dialog v-model="finishTask" persistent>
+      <q-card style="width: 328px; max-height: 378px">
         <q-card-section
           v-if="task.task_name === 'Быстрая задача'"
           style="font-size: 17px"
@@ -347,10 +349,11 @@
             Потраченное время на работу
           </div>
           <div class="row justify-center" style="font-size: 36px">
-            {{ elapsedTime }}
+            {{ formatTime(elapsedTime) }}
           </div>
         </q-card-section>
-        <q-card-section class="row justify-end">
+        <q-card-section class="row justify-between">
+          <q-btn color="#8F8F8F" outline @click="backToTask()">Отмена</q-btn>
           <q-btn color="positive" outline @click="finish()">Отправить</q-btn>
         </q-card-section>
         <q-card-section v-if="loading">
@@ -360,46 +363,11 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="fastTask"
-      ><q-card style="width: 328px; min-height: 400px">
-        <q-card-section style="font-size: 17px" class="text-bold">
-          Оформить быструю задачу
-        </q-card-section>
-        <q-card-section style="margin-bottom: 110px">
-          <div>Введите название быстрой задачи</div>
-          <q-input
-            v-model="fastTaskTitle"
-            class="q-mb-md"
-            :dense="true"
-            outlined
-            autogrow
-          >
-          </q-input>
-
-          <div>Выберите проект</div>
-          <q-select
-            v-model="model"
-            outlined
-            :options="options"
-            label="Выбор проекта"
-            :dense="true"
-          />
-
-          <div>Комментарий</div>
-          <q-input v-model="fastTaskDes" outlined :dense="true" autogrow>
-          </q-input>
-        </q-card-section>
-        <q-card-section class="row justify-between">
-          <q-btn color="8F8F8F" outline>Отмена</q-btn>
-          <q-btn color="positive" outline>Создать</q-btn>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { api } from "../boot/axios";
 import Header from "../components/Header.vue";
 import VueCookie from "vue-cookie";
@@ -413,7 +381,7 @@ export default defineComponent({
       model: null,
       options: [],
       task: [],
-      isPause: false,
+      isPause: ref(false),
       recognition: null,
       fastTaskTitle: "",
       fastTaskDes: "",
@@ -573,9 +541,8 @@ export default defineComponent({
       }
     },
     async endPause() {
+      this.isPause = false;
       try {
-        this.isPause = false;
-
         if (this.savedElapsedTime !== null) {
           this.elapsedTime = this.savedElapsedTime;
           this.savedElapsedTime = null;
@@ -607,7 +574,7 @@ export default defineComponent({
           "/task/",
           {
             user: VueCookie.get("id"),
-            task_name: "Быстрая задача1",
+            task_name: "Быстрая задача",
             description: " ",
             data_start: today,
             data_end: tomorrow,
@@ -711,6 +678,29 @@ export default defineComponent({
         console.error("Ошибка при проверке микрофона:", error);
       }
     },
+    formatDate(dateTimeString) {
+      const date = new Date(dateTimeString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day < 10 ? "0" : ""}${day}.${
+        month < 10 ? "0" : ""
+      }${month}.${year}`;
+    },
+    getUrgencyStyle(urgency) {
+      switch (urgency) {
+        case "Не срочно":
+          return "border: 1px solid var(---, #007CEE); background: var(---, rgba(0, 124, 238, 0.16)); color: var(---, #007CEE);";
+        case "Срочно":
+          return "border: 1px solid var(---, #D07E03);background: var(---, rgba(208, 126, 3, 0.16));color: var(---, #D07E03);";
+        case "Очень срочно":
+          return "border: 1px solid var(---, #E00); background: var(---, rgba(238, 0, 0, 0.16)); color: var(---, #E00);";
+      }
+    },
+    backToTask() {
+      this.finishTask = !this.finishTask;
+      this.startTimer();
+    },
   },
   watch: {
     elapsedTime() {
@@ -772,6 +762,7 @@ export default defineComponent({
 .task-mobile {
   padding: 16px 12px;
   width: 328px;
+  height: 100%;
   border-radius: 8px;
   border: 1px solid #8cc63e;
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);

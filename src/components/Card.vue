@@ -80,76 +80,81 @@
   </div>
 
   <div class="mobile-only native-mobile-hide row justify-center">
-    <q-card
-      class="q-pa-md card-mobile q-mb-sm"
-      :class="{ 'paused-card': task[id].isPause }"
-    >
-      <div class="row inline justify-between q-mb-sm">
-        <q-card-section
-          class="text-bold q-pa-none"
-          style="font-size: 15px; width: 260px"
-        >
-          <!-- Name -->
-          {{ task[id].task_name }}
-          <div class="q-mt-sm">
-            <q-chip
-              style="height: 20px; font-size: 10px"
-              text-color="dark"
-              class="date text-weight-medium q-ma-none q-mr-sm"
-            >
-              <!-- date -->
-              {{ formatDate(task[id].data_start) }}
-              - {{ formatDate(task[id].data_end) }}
-            </q-chip>
-            <q-chip
-              style="height: 20px; font-size: 10px"
-              text-color="negative"
-              class="urgency q-ma-none"
-            >
-              <!-- urgency -->
-              {{ task[id].urgency }}
-            </q-chip>
-          </div>
-        </q-card-section>
-
-        <q-btn
-          color="grey"
-          round
-          flat
-          dense
-          :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-          @click="expanded = !expanded"
-        />
-      </div>
-
-      <q-slide-transition>
-        <div v-show="expanded">
-          <q-card-section class="text-h6 no-padding">
-            {{ task[id].description }}
-            <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
-            voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
-            sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
-            Nesciunt fugiat animi perspiciatis. -->
+    <q-card class="q-pa-md card-mobile q-mb-sm">
+      <div :class="{ 'paused-card': task[id].isPause }">
+        <div class="row inline justify-between q-mb-sm">
+          <q-card-section
+            class="text-bold q-pa-none"
+            style="font-size: 15px; width: 260px"
+          >
+            <!-- Name -->
+            {{ task[id].task_name }}
             <div class="q-mt-sm">
-              <q-btn
-                class="q-pa-none btn"
-                outline
-                color="positive"
-                @click="taskStart(task[id]._id)"
+              <q-chip
+                style="height: 20px; font-size: 10px; border-radius: 8px"
+                text-color="dark"
+                class="date text-weight-medium q-ma-none q-mr-sm"
               >
-                Принять
-              </q-btn>
+                <!-- date -->
+                {{ formatDate(task[id].data_start) }}
+                - {{ formatDate(task[id].data_end) }}
+              </q-chip>
+              <q-chip
+                style="height: 20px; font-size: 10px; border-radius: 8px"
+                class="q-ma-none"
+                :style="getUrgencyStyle(task[id].urgency)"
+              >
+                <!-- urgency -->
+                {{ task[id].urgency }}
+              </q-chip>
             </div>
           </q-card-section>
+
+          <q-btn
+            color="grey"
+            round
+            flat
+            dense
+            :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+            @click="expanded = !expanded"
+          />
         </div>
-      </q-slide-transition>
+
+        <q-slide-transition>
+          <div v-show="expanded">
+            <q-card-section
+              class="no-padding"
+              style="font-size: 13px; line-height: 16px"
+            >
+              <!-- {{ task[id].description }} -->
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+              voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
+              sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
+              Nesciunt fugiat animi perspiciatis.
+              <div class="q-mt-sm">
+                <q-btn
+                  class="q-pa-none"
+                  outline
+                  size="12px"
+                  color="positive"
+                  @click="taskStart(task[id]._id)"
+                  style="width: 100%; border-radius: 4px"
+                >
+                  Начать
+                </q-btn>
+              </div>
+            </q-card-section>
+          </div>
+        </q-slide-transition>
+      </div>
 
       <div v-if="task[id].isPause" class="paused-overlay">
         <q-btn
           class="no-padding resume-button"
           @click.native="taskStart(task[id]._id)"
-          size="20px"
+          size="35px"
           flat
+          color="primary"
           icon="pause"
         >
         </q-btn>
@@ -286,6 +291,16 @@ export default {
       console.log(id);
       this.$router.push(`/task/:${id}`);
     },
+    getUrgencyStyle(urgency) {
+      switch (urgency) {
+        case "Не срочно":
+          return "border: 1px solid var(---, #007CEE); background: var(---, rgba(0, 124, 238, 0.16)); color: var(---, #007CEE);";
+        case "Срочно":
+          return "border: 1px solid var(---, #D07E03);background: var(---, rgba(208, 126, 3, 0.16));color: var(---, #D07E03);";
+        case "Очень срочно":
+          return "border: 1px solid var(---, #E00); background: var(---, rgba(238, 0, 0, 0.16)); color: var(---, #E00);";
+      }
+    },
   },
 };
 </script>
@@ -321,8 +336,8 @@ export default {
 }
 .urgency {
   border-radius: 8px;
-  border: 1px solid #e00;
-  background: var(--unnamed, rgba(238, 0, 0, 0.16));
+  border: 1px solid #007cee;
+  background: var(---, rgba(0, 124, 238, 0.16));
 }
 .full-card {
   max-width: 750px;
@@ -346,7 +361,7 @@ export default {
 
 .card-mobile {
   max-width: 328px;
-  border-radius: 24px;
+  border-radius: 8px;
   border: 1px solid #8cc63e;
   background: #fff;
   box-shadow: 0px 1px 11.3px 0px rgba(0, 0, 0, 0.25);

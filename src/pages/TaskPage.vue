@@ -328,6 +328,12 @@
                 />
               </template>
             </q-input>
+            <div style="font-size: 17px" class="q-mb-lg">
+              Потраченное время на работу
+            </div>
+            <div class="row justify-center" style="font-size: 36px">
+              {{ formatTime(elapsedTime) }}
+            </div>
           </div>
         </q-card-section>
         <q-card-section v-else style="font-size: 17px">
@@ -593,7 +599,7 @@ export default defineComponent({
         const id = response.data._id;
         console.log(id);
         Browser.open({
-          url: `https://spa-rho-eight.vercel.app/#/task/:${id}`,
+          url: `https://spa-chi-pink.vercel.app/#/task/:${id}`,
         });
         // this.$router.push(`/task/:${id}`);
         setTimeout(() => {

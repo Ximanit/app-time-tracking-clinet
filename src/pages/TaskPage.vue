@@ -192,7 +192,7 @@
     </q-dialog>
   </q-page>
 
-  <q-page class="mobile-only">
+  <q-page class="mobile-only native-mobile-hide">
     <Header :ispause="!this.isPause" />
     <div class="row justify-center">
       <q-btn
@@ -364,6 +364,181 @@
       </q-card>
     </q-dialog>
   </q-page>
+
+  <q-page class="capacitor-only">
+    <Header :ispause="!this.isPause" />
+    <div class="row justify-center">
+      <q-btn
+        class="q-mb-md"
+        text-color="white"
+        style="
+          width: 328px;
+          height: 52px;
+          background: linear-gradient(101deg, #8cc63e 0%, #099240 100%);
+        "
+        @click="createFastTask()"
+        >Оформить быструю задачу</q-btn
+      >
+    </div>
+
+    <div class="row justify-center">
+      <q-card class="task-mobile" :class="{ 'paused-card': task.isPause }">
+        <q-card-section class="text-bold text-h6 q-pa-none q-mb-lg">
+          {{ task.task_name }}
+        </q-card-section>
+        <q-card-section class="q-pt-none q-px-none">
+          <q-chip
+            style="height: 28px; font-size: 12px"
+            text-color="dark"
+            class="date text-weight-medium q-px-sm q-py-xs q-ma-none q-mr-md"
+          >
+            {{ formatDate(task.data_start) }}
+            - {{ formatDate(task.data_end) }}
+          </q-chip>
+          <q-chip
+            style="height: 28px; font-size: 12px"
+            :style="getUrgencyStyle(task.urgency)"
+            class="urgency q-ma-none q-px-sm q-py-xs"
+            >{{ task.urgency }}</q-chip
+          >
+        </q-card-section>
+        <q-card-section
+          class="q-pa-none q-mb-xl"
+          style="font-size: 16px; line-height: 24px"
+        >
+          {{ task.description }}
+          <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
+          voluptates voluptas, quaerat, accusantium suscipit dicta eveniet sunt
+          ipsa reiciendis hic voluptate sed, molestias totam quis. Nesciunt
+          fugiat animi perspiciatis. -->
+        </q-card-section>
+        <q-card-section class="row justify-center text-h3 q-pa-none q-mb-xl">
+          {{ formattedTime }}
+        </q-card-section>
+        <q-card-section class="row justify-between q-pa-none">
+          <q-btn
+            class="q-py-md q-px-lg text-h5"
+            style="width: 117px"
+            color="warning"
+            text-color="dark"
+            outline
+            @click="startPause()"
+          >
+            Пауза
+          </q-btn>
+          <q-btn
+            class="q-pa-none text-h5 q-py-md"
+            style="width: 163px; border-radius: 4px"
+            color="positive"
+            outline
+            @click="(finishTask = !finishTask), stopTimer()"
+          >
+            Завершить
+          </q-btn>
+        </q-card-section>
+        <div v-if="task.isPause" class="paused-overlay">
+          <q-btn
+            class="resume-button q-ma-md text-h5"
+            @click.native="endPause()"
+          >
+            Продолжить
+          </q-btn>
+        </div>
+      </q-card>
+    </div>
+    <q-dialog v-model="finishTask" persistent>
+      <q-card style="width: 328px; max-height: 378px">
+        <q-card-section
+          v-if="task.task_name === 'Быстрая задача'"
+          style="font-size: 17px"
+        >
+          <div>
+            Название задачи
+            <q-input outlined autogrow v-model="nameTask" class="q-mb-lg">
+              <template v-slot:append>
+                <q-btn
+                  @click="startButton()"
+                  round
+                  dense
+                  flat
+                  :icon="isRecording ? 'mic_off' : 'mic'"
+                />
+              </template>
+            </q-input>
+          </div>
+
+          <div>
+            Выберите проект
+            <q-select
+              v-model="model"
+              outlined
+              :options="options"
+              label="Выбор проекта"
+              :dense="true"
+              option-value="id"
+              option-label="name"
+              option-disable="inactive"
+              emit-value
+              map-options
+            />
+          </div>
+
+          <div>
+            Комментарий по работе
+            <q-input
+              outlined
+              autogrow
+              v-model="finalTranscript"
+              class="q-mb-lg"
+            >
+              <template v-slot:append>
+                <q-btn
+                  @click="startButton()"
+                  round
+                  dense
+                  flat
+                  :icon="isRecording ? 'mic_off' : 'mic'"
+                />
+              </template>
+            </q-input>
+          </div>
+        </q-card-section>
+        <q-card-section v-else style="font-size: 17px">
+          Комментарий по работе
+
+          <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
+            <template v-slot:append>
+              <q-btn
+                @click="startButton()"
+                round
+                dense
+                flat
+                :icon="isRecording ? 'mic_off' : 'mic'"
+              />
+            </template>
+          </q-input>
+
+          <div style="font-size: 17px" class="q-mb-lg">
+            Потраченное время на работу
+          </div>
+          <div class="row justify-center" style="font-size: 36px">
+            {{ formatTime(elapsedTime) }}
+          </div>
+        </q-card-section>
+        <q-card-section class="row justify-between">
+          <q-btn color="#8F8F8F" outline @click="backToTask()">Отмена</q-btn>
+          <q-btn color="positive" outline @click="finishCapacitor()"
+            >Отправить</q-btn
+          >
+        </q-card-section>
+        <q-card-section v-if="loading">
+          <div class="fixed-center">
+            <q-spinner-gears color="primary" size="7em" />
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </q-page>
 </template>
 
 <script>
@@ -437,6 +612,47 @@ export default defineComponent({
       }
     },
     async finish() {
+      if (this.finalTranscript == "") {
+        this.$q.notify({
+          type: "negative",
+          message: "Для начала запишите комментарий",
+        });
+        return;
+      }
+      if (this.task.task_name !== "Быстрая задача") {
+        try {
+          const res = await api.put(
+            `/task/${this.$route.params.id.substring(1)}`,
+            {
+              end: new Date(),
+              comment: this.finalTranscript,
+              complited: true,
+            }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log("ERROR");
+        }
+      } else {
+        try {
+          const res = await api.put(
+            `/task/${this.$route.params.id.substring(1)}`,
+            {
+              task_name: this.nameTask,
+              project: this.model,
+              end: new Date(),
+              comment: this.finalTranscript,
+              complited: true,
+            }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log("ERROR");
+        }
+      }
+      this.$router.push(`/`);
+    },
+    async finishCapacitor() {
       if (this.finalTranscript == "") {
         this.$q.notify({
           type: "negative",
@@ -593,7 +809,6 @@ export default defineComponent({
         this.$router.push(`/task/:${id}`);
         setTimeout(() => {
           this.getTask();
-          this.startTimer();
         }, 0.1);
       } catch (error) {
         console.log("Error");

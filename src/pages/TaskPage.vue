@@ -274,7 +274,7 @@
       </q-card>
     </div>
     <q-dialog v-model="finishTask" persistent>
-      <q-card style="width: 328px; max-height: 378px">
+      <q-card style="width: 328px; max-height: 512px">
         <q-card-section
           v-if="task.task_name === 'Быстрая задача'"
           style="font-size: 17px"
@@ -284,11 +284,11 @@
             <q-input outlined autogrow v-model="nameTask" class="q-mb-lg">
               <template v-slot:append>
                 <q-btn
-                  @click="startButton()"
+                  @click="startButtoName()"
                   round
                   dense
                   flat
-                  :icon="isRecording ? 'mic_off' : 'mic'"
+                  :icon="isRecording1 ? 'mic_off' : 'mic'"
                 />
               </template>
             </q-input>
@@ -320,7 +320,7 @@
             >
               <template v-slot:append>
                 <q-btn
-                  @click="startButton()"
+                  @click="startButtonComment()"
                   round
                   dense
                   flat
@@ -342,7 +342,7 @@
           <q-input outlined autogrow v-model="finalTranscript" class="q-mb-lg">
             <template v-slot:append>
               <q-btn
-                @click="startButton()"
+                @click="startButtonComment()"
                 round
                 dense
                 flat
@@ -393,6 +393,7 @@ export default defineComponent({
       fastTaskTitle: "",
       fastTaskDes: "",
       isRecording: false,
+      isRecording1: false,
       mediaRecorder: null,
       audioChunks: [],
       finalTranscript: "",
@@ -605,7 +606,7 @@ export default defineComponent({
         console.log("Error");
       }
     },
-    async startButton() {
+    async startButtonComment() {
       // Проверка наличия поддержки getUserMedia в браузере
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         console.error("Ваш браузер не поддерживает getUserMedia.");
@@ -679,6 +680,85 @@ export default defineComponent({
         } else {
           this.mediaRecorder.stop();
           this.isRecording = false;
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке микрофона:", error);
+      }
+    },
+    async startButtoName() {
+      // Проверка наличия поддержки getUserMedia в браузере
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error("Ваш браузер не поддерживает getUserMedia.");
+        return;
+      }
+
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const microphones = devices.filter(
+          (device) => device.kind === "audioinput"
+        );
+
+        if (microphones.length === 0) {
+          console.error("Микрофон не обнаружен.");
+          return;
+        }
+
+        const serverURL =
+          "https://app-time-tracking.onrender.com/speechRecognition/recognition/";
+
+        if (!this.isRecording1) {
+          navigator.mediaDevices
+            .getUserMedia({ audio: true })
+            .then((stream) => {
+              this.mediaRecorder = new MediaRecorder(stream);
+
+              this.mediaRecorder.addEventListener("dataavailable", (event) => {
+                this.audioChunks.push(event.data);
+              });
+
+              this.mediaRecorder.addEventListener("stop", () => {
+                const audioBlob = new Blob(this.audioChunks);
+                const fd = new FormData();
+                fd.append("audio", audioBlob);
+                this.loading = true;
+
+                // Отправка на сервер
+                fetch(serverURL, {
+                  method: "POST",
+                  body: fd,
+                })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error("Ошибка при отправке файла на сервер.");
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    this.nameTask = data.text;
+                    console.log(data.text);
+                    this.loading = false;
+                  })
+                  .catch((error) => {
+                    this.$q.notify({
+                      type: "negative",
+                      message: "Ошибка отправки записи на сервер",
+                    });
+                    console.error("Error during server request:", error);
+                    this.loading = false;
+                  });
+
+                this.audioChunks = [];
+              });
+
+              this.mediaRecorder.start();
+              this.isRecording1 = true;
+            })
+            .catch((error) => {
+              console.error("Error accessing microphone:", error);
+            });
+        } else {
+          this.mediaRecorder.stop();
+          this.isRecording1 = false;
         }
       } catch (error) {
         console.error("Ошибка при проверке микрофона:", error);

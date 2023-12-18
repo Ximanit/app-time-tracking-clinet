@@ -272,7 +272,7 @@ export default {
   methods: {
     async micro(id) {
       await Browser.open({
-        url: `https://spa-lac-omega.vercel.app/#/task/:${id}`,
+        url: `https://spa-one-black.vercel.app/#/task/:${id}`,
       });
       // console.log("Capacitor");
     },

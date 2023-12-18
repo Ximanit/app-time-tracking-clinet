@@ -107,6 +107,7 @@ export default defineComponent({
       }
     },
     async updateTask() {
+      this.getTask();
       this.loading = true;
       console.log("Событие нажатия обработано корректно");
       try {
@@ -160,7 +161,7 @@ export default defineComponent({
         const id = response.data._id;
 
         await Browser.open({
-          url: `https://spa-lac-omega.vercel.app/#/task/:${id}`,
+          url: `https://spa-one-black.vercel.app/#/task/:${id}`,
         });
         // this.$router.push(`/task/:${id}`);
         // setTimeout(() => {

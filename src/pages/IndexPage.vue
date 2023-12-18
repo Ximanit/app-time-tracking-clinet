@@ -63,6 +63,7 @@ import Card from "src/components/Card.vue";
 import Header from "src/components/Header.vue";
 import { api } from "../boot/axios";
 import VueCookie from "vue-cookie";
+import { Browser } from "@capacitor/browser";
 
 export default defineComponent({
   name: "IndexPage",
@@ -161,7 +162,7 @@ export default defineComponent({
         const id = response.data._id;
 
         await Browser.open({
-          url: `https://spa-one-black.vercel.app/#/task/:${id}`,
+          url: `https://spa-seven-weld.vercel.app/#/task/:${id}`,
         });
         // this.$router.push(`/task/:${id}`);
         // setTimeout(() => {

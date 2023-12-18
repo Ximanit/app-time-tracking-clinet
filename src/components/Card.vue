@@ -209,11 +209,7 @@
               class="no-padding"
               style="font-size: 13px; line-height: 16px"
             >
-              <!-- {{ task[id].description }} -->
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et eum
-              voluptates voluptas, quaerat, accusantium suscipit dicta eveniet
-              sunt ipsa reiciendis hic voluptate sed, molestias totam quis.
-              Nesciunt fugiat animi perspiciatis.
+              {{ task[id].description }}
               <div class="q-mt-sm">
                 <q-btn
                   class="q-pa-none"
@@ -272,7 +268,7 @@ export default {
   methods: {
     async micro(id) {
       await Browser.open({
-        url: `https://spa-one-black.vercel.app/#/task/:${id}`,
+        url: `https://spa-seven-weld.vercel.app/#/task/:${id}`,
       });
       // console.log("Capacitor");
     },
